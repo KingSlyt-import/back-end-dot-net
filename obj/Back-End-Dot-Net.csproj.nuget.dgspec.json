@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\DUCQUAN\\OneDrive\\Desktop\\University\\2022-2023-HK2\\Net\\Final\\Back-End-Dot-Net\\Back-End-Dot-Net.csproj": {}
+    "C:\\Users\\ASUS\\OneDrive\\Tài liệu\\DotNet\\back-end-dot-net\\Back-End-Dot-Net.csproj": {}
   },
   "projects": {
-    "C:\\Users\\DUCQUAN\\OneDrive\\Desktop\\University\\2022-2023-HK2\\Net\\Final\\Back-End-Dot-Net\\Back-End-Dot-Net.csproj": {
+    "C:\\Users\\ASUS\\OneDrive\\Tài liệu\\DotNet\\back-end-dot-net\\Back-End-Dot-Net.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\DUCQUAN\\OneDrive\\Desktop\\University\\2022-2023-HK2\\Net\\Final\\Back-End-Dot-Net\\Back-End-Dot-Net.csproj",
+        "projectUniqueName": "C:\\Users\\ASUS\\OneDrive\\Tài liệu\\DotNet\\back-end-dot-net\\Back-End-Dot-Net.csproj",
         "projectName": "Back-End-Dot-Net",
-        "projectPath": "C:\\Users\\DUCQUAN\\OneDrive\\Desktop\\University\\2022-2023-HK2\\Net\\Final\\Back-End-Dot-Net\\Back-End-Dot-Net.csproj",
-        "packagesPath": "C:\\Users\\DUCQUAN\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\DUCQUAN\\OneDrive\\Desktop\\University\\2022-2023-HK2\\Net\\Final\\Back-End-Dot-Net\\obj\\",
+        "projectPath": "C:\\Users\\ASUS\\OneDrive\\Tài liệu\\DotNet\\back-end-dot-net\\Back-End-Dot-Net.csproj",
+        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ASUS\\OneDrive\\Tài liệu\\DotNet\\back-end-dot-net\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\DUCQUAN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -78,7 +78,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

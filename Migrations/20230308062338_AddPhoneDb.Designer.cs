@@ -4,6 +4,7 @@ using Back_End_Dot_Net.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Back_End_Dot_Net.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230308062338_AddPhoneDb")]
+    partial class AddPhoneDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,10 +73,6 @@ namespace Back_End_Dot_Net.Migrations
                     b.Property<int>("Charging")
                         .HasColumnType("int");
 
-                    b.Property<string>("Cpu")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CpuHz")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -99,10 +98,6 @@ namespace Back_End_Dot_Net.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("MainCameraMP")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Maunufacture")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
