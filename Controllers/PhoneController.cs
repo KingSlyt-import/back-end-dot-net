@@ -45,5 +45,13 @@ namespace Back_End_Dot_Net.Controllers
 
             return phone;
         }
+
+        [HttpPost]
+        public async Task<ActionResult<Phone>> PostPhone(Phone phone)
+        {
+            _dbContext.Phones.Add(phone);
+            await _dbContext.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetPhone), new {id=phone.Id},phone);
+        }
     }
 }
