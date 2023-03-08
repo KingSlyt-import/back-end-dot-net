@@ -5,18 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Back_End_Dot_Net.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/index")]
     [ApiController]
-    public class IndexController : ControllerBase
+    public class ImageController : ControllerBase
     {
         private readonly ApplicationDBContext _dbContext;
 
-        public IndexController(ApplicationDBContext dbContext)
+        public ImageController(ApplicationDBContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        [Route("GetImages")]
+        [Route("get-images")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Image>>> GetImages()
         {
@@ -28,7 +28,7 @@ namespace Back_End_Dot_Net.Controllers
             return await _dbContext.Images.ToListAsync();
         }
 
-        [Route("GetImage/{id}")]
+        [Route("get-image-by-id/{id}")]
         [HttpGet]
         public async Task<ActionResult<Image>> GetImagesById(int id)
         {

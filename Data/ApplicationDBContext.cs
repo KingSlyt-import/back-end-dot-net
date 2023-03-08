@@ -11,5 +11,6 @@ namespace Back_End_Dot_Net.Data
         }
 
         public DbSet<Image> Images { get; set; }
+        public DbSet<Phone> Phones { get; set; }
     }
 }
