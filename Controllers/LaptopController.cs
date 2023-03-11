@@ -18,14 +18,34 @@ namespace Back_End_Dot_Net.Controllers
 
         [Route("get-laptops")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Phone>>> GetLaptop()
+        public async Task<ActionResult<IEnumerable<Laptop>>> GetLaptop()
         {
             if (_dbContext.Phones == null)
             {
                 return NotFound();
             }
 
-            return await _dbContext.Phones.ToListAsync();
+            var phone = await _dbContext.Laptops
+                .Select(laptop => new
+                {
+                    laptop.Name,
+                    laptop.Cpu,
+                    laptop.CpuSpeedBase,
+                    laptop.CpuSpeedBoost,
+                    laptop.Ram,
+                    laptop.RamSpeed,
+                    laptop.ScreenSize,
+                    laptop.Resolution,
+                    laptop.Weight
+                })
+                .ToListAsync();
+
+            if (phone == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(phone);
         }
 
         [Route("get-laptop-by-name/{name}")]
