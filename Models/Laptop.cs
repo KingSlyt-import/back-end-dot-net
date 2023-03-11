@@ -24,10 +24,10 @@ namespace Back_End_Dot_Net.Models
         [DisplayName("RAM Speed")]
         public int RamSpeed { get; set; }
         [DisplayName("Screen Resolution")]
-        public int Resolution { get; set; }
+        public string Resolution { get; set; }
         [DisplayName("Pixels Per Inch")]
         public int Ppi { get; set; }
-        public int Weight { get; set; }
+        public double Weight { get; set; }
         [DisplayName("Internal Storage")]
         public int InStorage { get; set; }
         [DisplayName("Screen Size")]

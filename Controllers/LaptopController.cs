@@ -68,7 +68,7 @@ namespace Back_End_Dot_Net.Controllers
             _dbContext.Laptops.Add(laptop);
             await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetLaptop), new {name = laptop.Name});
+            return CreatedAtAction(nameof(GetLaptop), new {name = laptop.Name}, laptop);
         }
     }
 }
