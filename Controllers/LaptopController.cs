@@ -29,14 +29,15 @@ namespace Back_End_Dot_Net.Controllers
                 .Select(laptop => new
                 {
                     laptop.Name,
+                    laptop.Image,
                     laptop.Cpu,
                     laptop.CpuSpeedBase,
                     laptop.CpuSpeedBoost,
                     laptop.Ram,
                     laptop.RamSpeed,
                     laptop.ScreenSize,
-                    laptop.Resolution,
-                    laptop.Weight
+                    laptop.InStorage,
+                    laptop.Weight,
                 })
                 .ToListAsync();
 
