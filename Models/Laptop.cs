@@ -9,10 +9,11 @@ namespace Back_End_Dot_Net.Models
         [Required]
         public string Name { get; set; }
         [Required]
-        public int Price { get; set; }
+        public double Price { get; set; }
         [Required]
         public string Image { get; set; }
         public string Description { get; set; }
+        public string Manufacture { get; set; }
         [DisplayName("CPU")]
         public string Cpu { get; set; }
         [DisplayName("Base CPU Speed")]
@@ -33,6 +34,7 @@ namespace Back_End_Dot_Net.Models
         [DisplayName("Screen Size")]
         public int ScreenSize { get; set; }
         public string Meta { get; set; }
+        [DefaultValue(false)]
         public bool Hide { get; set; } = false;
         [DisplayName("Access Time")]
         public int AccessTime { get; set; } = 0;

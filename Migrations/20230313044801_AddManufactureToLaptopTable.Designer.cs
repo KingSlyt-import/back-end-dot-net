@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Back_End_Dot_Net.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20230311145306_ModifyLaptopsProperties")]
-    partial class ModifyLaptopsProperties
+    [Migration("20230313044801_AddManufactureToLaptopTable")]
+    partial class AddManufactureToLaptopTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,6 +94,10 @@ namespace Back_End_Dot_Net.Migrations
                     b.Property<int>("InStorage")
                         .HasColumnType("int");
 
+                    b.Property<string>("Manufacture")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Meta")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -105,8 +109,8 @@ namespace Back_End_Dot_Net.Migrations
                     b.Property<int>("Ppi")
                         .HasColumnType("int");
 
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<int>("Ram")
                         .HasColumnType("int");
