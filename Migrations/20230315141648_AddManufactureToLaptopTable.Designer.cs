@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Back_End_Dot_Net.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20230313044801_AddManufactureToLaptopTable")]
+    [Migration("20230315141648_AddManufactureToLaptopTable")]
     partial class AddManufactureToLaptopTable
     {
         /// <inheritdoc />
