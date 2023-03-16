@@ -26,7 +26,7 @@ namespace Back_End_Dot_Net.Models
         public int Ram { get; set; }
 
         [DisplayName("Screen Resolution")]
-        public int Resolution { get; set; }
+        public string Resolution { get; set; }
 
         [DisplayName("CPU")]
         public string Cpu { get; set; }
