@@ -30,7 +30,7 @@ namespace Back_End_Dot_Net.Controllers
                 {
                     chipset.Name,
                     chipset.Image,
-                    chipset.CpuSpeed,
+                    chipset.MaxCpuSpeed,
                     chipset.CpuThread,
                     chipset.NanometNumber,
                     chipset.Manufacture,
