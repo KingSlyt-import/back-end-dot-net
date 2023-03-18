@@ -32,9 +32,7 @@ namespace Back_End_Dot_Net.Controllers
                     phone.Image,
                     phone.BatteryPower,
                     phone.Charging,
-                    phone.FrontCameraMP,
                     phone.InStorage,
-                    phone.MainCameraMP,
                     phone.Nits,
                     phone.Ram,
                     phone.ScreenHz
