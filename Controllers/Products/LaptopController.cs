@@ -30,7 +30,8 @@ namespace Back_End_Dot_Net.Controllers
                 {
                     laptop.Name,
                     laptop.Image,
-                    laptop.Cpu,
+                    laptop.CPUName,
+                    laptop.CPUType,
                     laptop.CpuSpeedBase,
                     laptop.CpuSpeedBoost,
                     laptop.Ram,
@@ -64,7 +65,8 @@ namespace Back_End_Dot_Net.Controllers
                 {
                     laptop.Name,
                     laptop.Image,
-                    laptop.Cpu,
+                    laptop.CPUName,
+                    laptop.CPUType,
                     laptop.CpuSpeedBase,
                     laptop.CpuSpeedBoost,
                     laptop.Ram,
@@ -83,14 +85,22 @@ namespace Back_End_Dot_Net.Controllers
             return Ok(phone);
         }
 
+        [Route("top-5-accessed-laptops")]
+        [HttpGet]
+        public IActionResult GetTop5AccessedLaptops()
+        {
+            var top5Laptops = _dbContext.Laptops.OrderByDescending(p => p.AccessTime).Take(5).ToList();
+            return Ok(top5Laptops);
+        }
+
         [Route("create-laptop")]
         [HttpPost]
-        public async Task<ActionResult<Laptop>> CreateLaptop(Laptop laptop) 
+        public async Task<ActionResult<Laptop>> CreateLaptop(Laptop laptop)
         {
             _dbContext.Laptops.Add(laptop);
             await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetLaptop), new {name = laptop.Name}, laptop);
+            return CreatedAtAction(nameof(GetLaptop), new { name = laptop.Name }, laptop);
         }
     }
 }

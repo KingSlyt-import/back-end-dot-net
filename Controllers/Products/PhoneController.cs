@@ -34,7 +34,7 @@ namespace Back_End_Dot_Net.Controllers
                     phone.Charging,
                     phone.InStorage,
                     phone.Nits,
-                    phone.Ram,
+                    phone.RAM,
                     phone.ScreenHz
                 })
                 .ToListAsync();
@@ -68,7 +68,7 @@ namespace Back_End_Dot_Net.Controllers
                     phone.InStorage,
                     phone.MainCameraMP,
                     phone.Nits,
-                    phone.Ram,
+                    phone.RAM,
                     phone.ScreenHz
                 })
                 .ToListAsync();
@@ -81,13 +81,21 @@ namespace Back_End_Dot_Net.Controllers
             return Ok(phone);
         }
 
+        [Route("top-5-accessed-phones")]
+        [HttpGet]
+        public IActionResult GetTop5AccessedPhones()
+        {
+            var top5Phones = _dbContext.Phones.OrderByDescending(p => p.AccessTime).Take(5).ToList();
+            return Ok(top5Phones);
+        }
+
         [Route("create-phone")]
         [HttpPost]
         public async Task<ActionResult<Phone>> PostPhone(Phone phone)
         {
             _dbContext.Phones.Add(phone);
             await _dbContext.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetPhone), new {id=phone.Id},phone);
+            return CreatedAtAction(nameof(GetPhone), new { id = phone.Id }, phone);
         }
     }
 }

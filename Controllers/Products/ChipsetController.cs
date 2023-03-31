@@ -30,12 +30,13 @@ namespace Back_End_Dot_Net.Controllers
                 {
                     chipset.Name,
                     chipset.Image,
-                    chipset.MaxCpuSpeed,
+                    chipset.CpuSpeedBase,
+                    chipset.CpuSpeedBoost,
                     chipset.CpuThread,
-                    chipset.NanometNumber,
+                    chipset.semiconductorSize,
                     chipset.Manufacture,
                     chipset.Benchmark,
-                    chipset.Memory,
+                    chipset.Memory
                 })
                 .ToListAsync();
 
@@ -62,9 +63,10 @@ namespace Back_End_Dot_Net.Controllers
                 {
                     chipset.Name,
                     chipset.Image,
-                    chipset.CpuSpeed,
+                    chipset.CpuSpeedBase,
+                    chipset.CpuSpeedBoost,
                     chipset.CpuThread,
-                    chipset.NanometNumber,
+                    chipset.semiconductorSize,
                     chipset.Manufacture,
                     chipset.Benchmark,
                     chipset.Memory,
@@ -77,6 +79,14 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             return Ok(chipset);
+        }
+
+        [Route("top-5-accessed-Chipsets")]
+        [HttpGet]
+        public IActionResult GetTop5AccessedChipsets()
+        {
+            var top5Chipsets = _dbContext.Chipsets.OrderByDescending(p => p.AccessTime).Take(5).ToList();
+            return Ok(top5Chipsets);
         }
 
         [Route("create-chipset")]
