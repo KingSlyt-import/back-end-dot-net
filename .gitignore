@@ -24,3 +24,7 @@ Version.cs
 Version.h
 Version.cpp
 .vs/Back-End-Dot-Net/config/applicationhost.config
+.vs/Back-End-Dot-Net/config/applicationhost.config
+.vs/ProjectEvaluation/back-end-dot-net.metadata.v5.2
+.vs/ProjectEvaluation/back-end-dot-net.projects.v5.2
+appsettings.json

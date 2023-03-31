@@ -16,6 +16,25 @@ namespace Back_End_Dot_Net.Controllers
             _dbContext = dbContext;
         }
 
+        [Route("get-all-laptops")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Laptop>>> GetAllLaptop()
+        {
+            if (_dbContext.Phones == null)
+            {
+                return NotFound();
+            }
+
+            var phone = await _dbContext.Laptops.ToListAsync();
+
+            if (phone == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(phone);
+        }
+
         [Route("get-laptops")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Laptop>>> GetLaptop()
@@ -97,6 +116,8 @@ namespace Back_End_Dot_Net.Controllers
         [HttpPost]
         public async Task<ActionResult<Laptop>> CreateLaptop(Laptop laptop)
         {
+            laptop.Id = Guid.NewGuid();
+
             _dbContext.Laptops.Add(laptop);
             await _dbContext.SaveChangesAsync();
 

@@ -6,7 +6,7 @@ namespace Back_End_Dot_Net.Models
 {
     public class Image
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public string? Name { get; set; }
