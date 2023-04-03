@@ -7,6 +7,7 @@ namespace Back_End_Dot_Net.Models
     public class Laptop
     {
         // Overview
+        [JsonIgnore]
         public Guid Id { get; set; }
 
         [Required]
@@ -23,17 +24,11 @@ namespace Back_End_Dot_Net.Models
         public string? Manufacture { get; set; }
 
         // Performance properties
-        [DisplayName("CPU Name")]
-        public string? CPUName { get; set; }
+        [DisplayName("CPU ID")]
+        public Guid CpuId { get; set; }
 
-        [DisplayName("CPU Type")]
-        public string? CPUType { get; set; }
-
-        [DisplayName("Base CPU Speed")]
-        public double CpuSpeedBase { get; set; }
-
-        [DisplayName("Boost CPU Speed")]
-        public double CpuSpeedBoost { get; set; }
+        // Navigation property for CPU
+        public Chipset? CPU { get; set; }
 
         [DisplayName("RAM")]
         public int Ram { get; set; }
@@ -45,7 +40,7 @@ namespace Back_End_Dot_Net.Models
         public int InStorage { get; set; }
 
         [DisplayName("Performance Feature")]
-        public LaptopPerformanceFeatures PerformanceFeatures { get; set; }
+        public string[]? PerformanceFeatures { get; set; }
 
         // Screen Properties
         [DisplayName("Screen Size")]
@@ -64,7 +59,7 @@ namespace Back_End_Dot_Net.Models
         public int Ppi { get; set; }
 
         [DisplayName("Screen Feature")]
-        public LaptopScreenFeatures ScreenFeatures { get; set; }
+        public string[]? ScreenFeatures { get; set; }
 
         // Design Properties
         public double Weight { get; set; }
@@ -76,7 +71,7 @@ namespace Back_End_Dot_Net.Models
         public double Thickness { get; set; }
 
         [DisplayName("Design Feature")]
-        public LaptopDesignFeatures DesignFeatures { get; set; }
+        public string[]? DesignFeatures { get; set; }
 
         // Battery properties
         [DisplayName("Battery Power")]
@@ -87,7 +82,7 @@ namespace Back_End_Dot_Net.Models
 
         // Features
         [DisplayName("Other Feature")]
-        public LaptopFeatures Features { get; set; }
+        public string[]? Features { get; set; }
 
         [DefaultValue(false)]
         [JsonIgnore]

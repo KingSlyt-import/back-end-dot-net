@@ -173,3 +173,5 @@ C:\Users\ASUS\OneDrive\Tài liệu\DotNet\back-end-dot-net\obj\Debug\net6.0\Ba
 C:\Users\ASUS\OneDrive\Tài liệu\DotNet\back-end-dot-net\obj\Debug\net6.0\Back-End-Dot-Net.genruntimeconfig.cache
 C:\Users\ASUS\OneDrive\Tài liệu\DotNet\back-end-dot-net\obj\Debug\net6.0\ref\Back-End-Dot-Net.dll
 C:\Users\DUCQUAN\OneDrive\Desktop\University\2022-2023-HK2\Net\Final\Back-End-Dot-Net\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\DUCQUAN\OneDrive\Desktop\University\2022-2023-HK2\Net\Final\Back-End-Dot-Net\bin\Debug\net6.0\input.json
+C:\Users\DUCQUAN\OneDrive\Desktop\University\2022-2023-HK2\Net\Final\Back-End-Dot-Net\bin\Debug\net6.0\Swashbuckle.AspNetCore.Annotations.dll

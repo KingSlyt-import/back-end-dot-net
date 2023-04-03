@@ -7,6 +7,7 @@ namespace Back_End_Dot_Net.Models
     public class Chipset
     {
         // Overview
+        [JsonIgnore]
         public Guid Id { get; set; }
 
         [Required]
@@ -19,10 +20,10 @@ namespace Back_End_Dot_Net.Models
 
         public string? Manufacture { get; set; }
 
-        public ChipsetType Type { get; set; }
+        public string[]? Type { get; set; }
 
         [DisplayName("CPU Socket")]
-        public ChipsetSocket CPUSocket { get; set; }
+        public string[]? CPUSocket { get; set; }
 
         [DisplayName("CPU Temperature")]
         public int CPUTemp { get; set; }
@@ -43,24 +44,25 @@ namespace Back_End_Dot_Net.Models
         [DisplayName("Semiconductor size")]
         public double semiconductorSize { get; set; }
 
-        [DisplayName("Benchmark Result")]
-        public double Benchmark { get; set; }
-
         [DisplayName("PCIe")]
         public int Pci { get; set; }
 
         [DisplayName("Memory channels")]
-        public int Memory { get; set; }
+        public int MemoryChannels { get; set; }
 
         [DisplayName("Performance Features")]
-        public ChipsetPerformanceFeatures ChipsetPerformanceFeatures { get; set; }
+        public string[]? ChipsetPerformanceFeatures { get; set; }
 
         // RAM Support
         [DisplayName("DDR Version")]
-        public ChipsetRAMVersion ChipsetRAMVersion { get; set; }
+        public string[]? ChipsetRAMVersion { get; set; }
 
         [DisplayName("RAM Speed")]
         public int RAMSpeed { get; set; }
+
+        // navigation property for laptops
+        [JsonIgnore]
+        public ICollection<Laptop>? Laptops { get; set; }
 
         // Others
         [DefaultValue(false)]

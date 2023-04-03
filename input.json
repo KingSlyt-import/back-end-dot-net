@@ -1,0 +1,21 @@
+{
+    "id": "",
+    "name": "string",
+    "image": "string",
+    "description": "string",
+    "manufacture": "string",
+    "type": "Laptop",
+    "cpuSocket": "LGA1150",
+    "cpuTemp": 0,
+    "tdp": 0,
+    "cpuSpeedBase": 0,
+    "cpuSpeedBoost": 0,
+    "cpuThread": 0,
+    "semiconductorSize": 0,
+    "benchmark": 0,
+    "pci": 0,
+    "memory": 0,
+    "chipsetPerformanceFeatures": "UnlockedMultiplier",
+    "chipsetRAMVersion": "DDR3",
+    "ramSpeed": 0
+  }

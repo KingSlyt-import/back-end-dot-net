@@ -1,5 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 
+public enum LaptopCPUType 
+{
+    AMD,
+    Intel
+}
+
 public enum LaptopPerformanceFeatures
 {
     NVMe,

@@ -49,10 +49,7 @@ namespace Back_End_Dot_Net.Controllers
                 {
                     laptop.Name,
                     laptop.Image,
-                    laptop.CPUName,
-                    laptop.CPUType,
-                    laptop.CpuSpeedBase,
-                    laptop.CpuSpeedBoost,
+                    laptop.CPU,
                     laptop.Ram,
                     laptop.RamSpeed,
                     laptop.ScreenSize,
@@ -84,10 +81,7 @@ namespace Back_End_Dot_Net.Controllers
                 {
                     laptop.Name,
                     laptop.Image,
-                    laptop.CPUName,
-                    laptop.CPUType,
-                    laptop.CpuSpeedBase,
-                    laptop.CpuSpeedBoost,
+                    laptop.CPU,
                     laptop.Ram,
                     laptop.RamSpeed,
                     laptop.ScreenSize,

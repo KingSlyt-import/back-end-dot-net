@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Back_End_Dot_Net.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,10 @@ builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlSer
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Make enum data type represent as strings in SwaggerUI
+builder.Services.AddControllers().AddJsonOptions(options =>
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 if (builder.Environment.IsDevelopment())
 {

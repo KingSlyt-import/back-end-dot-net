@@ -7,6 +7,7 @@ namespace Back_End_Dot_Net.Models
     public class Phone
     {
         // Overview
+        [JsonIgnore]
         public Guid Id { get; set; }
 
         [Required]
@@ -46,7 +47,7 @@ namespace Back_End_Dot_Net.Models
         public int InStorage { get; set; }
 
         [DisplayName("Performance Feature")]
-        public PhonePerformanceFeatures PerformanceFeatures { get; set; }
+        public string[]? PerformanceFeatures { get; set; }
 
         // Screen Properties
         [DisplayName("Screen Size")]
@@ -65,7 +66,7 @@ namespace Back_End_Dot_Net.Models
         public int Ppi { get; set; }
 
         [DisplayName("Screen Feature")]
-        public PhoneScreenFeatures ScreenFeatures { get; set; }
+        public string[]? ScreenFeatures { get; set; }
 
         // Design Properties
         public double Weight { get; set; }
@@ -75,7 +76,7 @@ namespace Back_End_Dot_Net.Models
         public double Width { get; set; }
 
         [DisplayName("Design Feature")]
-        public PhoneDesignFeatures DesignFeatures { get; set; }
+        public string[]? DesignFeatures { get; set; }
 
         // Camera properties
         [DisplayName("Main Camera Megapixels")]
@@ -96,7 +97,7 @@ namespace Back_End_Dot_Net.Models
 
         // Features
         [DisplayName("Other Feature")]
-        public PhoneFeatures Features { get; set; }
+        public string[]? Features { get; set; }
 
         // Others
         [DefaultValue(false)]

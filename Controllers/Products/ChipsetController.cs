@@ -35,8 +35,7 @@ namespace Back_End_Dot_Net.Controllers
                     chipset.CpuThread,
                     chipset.semiconductorSize,
                     chipset.Manufacture,
-                    chipset.Benchmark,
-                    chipset.Memory
+                    chipset.MemoryChannels
                 })
                 .ToListAsync();
 
@@ -68,8 +67,7 @@ namespace Back_End_Dot_Net.Controllers
                     chipset.CpuThread,
                     chipset.semiconductorSize,
                     chipset.Manufacture,
-                    chipset.Benchmark,
-                    chipset.Memory,
+                    chipset.MemoryChannels,
                 })
                 .ToListAsync();
 
