@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Back_End_Dot_Net.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20230317044856_AddCpuDb")]
-    partial class AddCpuDb
+    [Migration("20230403030026_InitDb")]
+    partial class InitDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,9 @@ namespace Back_End_Dot_Net.Migrations
 
             modelBuilder.Entity("Back_End_Dot_Net.Models.Chipset", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessTime")
                         .HasColumnType("int");
@@ -39,9 +37,23 @@ namespace Back_End_Dot_Net.Migrations
                     b.Property<double>("Benchmark")
                         .HasColumnType("float");
 
-                    b.Property<string>("CpuSpeed")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CPUSocket")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CPUTemp")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChipsetPerformanceFeatures")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChipsetRAMVersion")
+                        .HasColumnType("int");
+
+                    b.Property<double>("CpuSpeedBase")
+                        .HasColumnType("float");
+
+                    b.Property<double>("CpuSpeedBoost")
+                        .HasColumnType("float");
 
                     b.Property<double>("CpuThread")
                         .HasColumnType("float");
@@ -50,7 +62,6 @@ namespace Back_End_Dot_Net.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Hide")
@@ -61,28 +72,29 @@ namespace Back_End_Dot_Net.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Manufacture")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("MaxCpuSpeed")
-                        .HasColumnType("float");
 
                     b.Property<int>("Memory")
                         .HasColumnType("int");
-
-                    b.Property<string>("Meta")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("NanometNumber")
-                        .HasColumnType("float");
-
                     b.Property<int>("Pci")
                         .HasColumnType("int");
+
+                    b.Property<int>("RAMSpeed")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TDP")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<double>("semiconductorSize")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -91,11 +103,12 @@ namespace Back_End_Dot_Net.Migrations
 
             modelBuilder.Entity("Back_End_Dot_Net.Models.Image", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<int>("AccessTime")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -122,17 +135,20 @@ namespace Back_End_Dot_Net.Migrations
 
             modelBuilder.Entity("Back_End_Dot_Net.Models.Laptop", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessTime")
                         .HasColumnType("int");
 
-                    b.Property<string>("Cpu")
-                        .IsRequired()
+                    b.Property<int>("BatteryPower")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CPUName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CPUType")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("CpuSpeedBase")
@@ -145,8 +161,16 @@ namespace Back_End_Dot_Net.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DesignFeatures")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Features")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Height")
+                        .HasColumnType("float");
 
                     b.Property<bool>("Hide")
                         .HasColumnType("bit");
@@ -158,17 +182,21 @@ namespace Back_End_Dot_Net.Migrations
                     b.Property<int>("InStorage")
                         .HasColumnType("int");
 
-                    b.Property<string>("Manufacture")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("MagSafe")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Meta")
-                        .IsRequired()
+                    b.Property<string>("Manufacture")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Nits")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PerformanceFeatures")
+                        .HasColumnType("int");
 
                     b.Property<int>("Ppi")
                         .HasColumnType("int");
@@ -183,13 +211,24 @@ namespace Back_End_Dot_Net.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Resolution")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ScreenSize")
+                    b.Property<int>("ScreenFeatures")
                         .HasColumnType("int");
 
+                    b.Property<int>("ScreenHz")
+                        .HasColumnType("int");
+
+                    b.Property<double>("ScreenSize")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Thickness")
+                        .HasColumnType("float");
+
                     b.Property<double>("Weight")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Width")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
@@ -199,11 +238,9 @@ namespace Back_End_Dot_Net.Migrations
 
             modelBuilder.Entity("Back_End_Dot_Net.Models.Phone", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessTime")
                         .HasColumnType("int");
@@ -211,26 +248,38 @@ namespace Back_End_Dot_Net.Migrations
                     b.Property<int>("BatteryPower")
                         .HasColumnType("int");
 
+                    b.Property<string>("CPUName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("CPUSpeedBase")
+                        .HasColumnType("float");
+
+                    b.Property<double>("CPUSpeedBoost")
+                        .HasColumnType("float");
+
+                    b.Property<string>("CPUType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Charging")
                         .HasColumnType("int");
-
-                    b.Property<string>("Cpu")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CpuHz")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DesignFeatures")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Features")
+                        .HasColumnType("int");
 
                     b.Property<int>("FrontCameraMP")
                         .HasColumnType("int");
+
+                    b.Property<double>("Height")
+                        .HasColumnType("float");
 
                     b.Property<bool>("Hide")
                         .HasColumnType("bit");
@@ -242,16 +291,13 @@ namespace Back_End_Dot_Net.Migrations
                     b.Property<int>("InStorage")
                         .HasColumnType("int");
 
+                    b.Property<bool>("MagSafe")
+                        .HasColumnType("bit");
+
                     b.Property<string>("MainCameraMP")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Maunufacture")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Meta")
-                        .IsRequired()
+                    b.Property<string>("Manufacture")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -261,25 +307,38 @@ namespace Back_End_Dot_Net.Migrations
                     b.Property<int>("Nits")
                         .HasColumnType("int");
 
+                    b.Property<int>("PerformanceFeatures")
+                        .HasColumnType("int");
+
                     b.Property<int>("Ppi")
                         .HasColumnType("int");
 
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.Property<int>("Ram")
+                    b.Property<int>("RAM")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RAMSpeed")
                         .HasColumnType("int");
 
                     b.Property<string>("Resolution")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ScreenFeatures")
+                        .HasColumnType("int");
 
                     b.Property<int>("ScreenHz")
                         .HasColumnType("int");
 
-                    b.Property<string>("ScreenSize")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("ScreenSize")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Weight")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Width")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 

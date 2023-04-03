@@ -93,6 +93,8 @@ namespace Back_End_Dot_Net.Controllers
         [HttpPost]
         public async Task<ActionResult<Phone>> PostPhone(Phone phone)
         {
+            phone.Id = Guid.NewGuid();
+
             _dbContext.Phones.Add(phone);
             await _dbContext.SaveChangesAsync();
             return CreatedAtAction(nameof(GetPhone), new { id = phone.Id }, phone);

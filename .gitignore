@@ -4,7 +4,6 @@
 *.cache
 *.dll
 .vs/Back-End-Dot-Net/v17/.suo
-obj/Debug/net6.0/
 
 /build/
 *.suo
@@ -12,8 +11,6 @@ obj/Debug/net6.0/
 _ReSharper.*/
 *.sdf
 bin/
-obj/
-Debug/
 Release/
 *.opensdf
 *.tlog

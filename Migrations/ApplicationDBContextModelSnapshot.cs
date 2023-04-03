@@ -24,11 +24,9 @@ namespace Back_End_Dot_Net.Migrations
 
             modelBuilder.Entity("Back_End_Dot_Net.Models.Chipset", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessTime")
                         .HasColumnType("int");
@@ -102,11 +100,9 @@ namespace Back_End_Dot_Net.Migrations
 
             modelBuilder.Entity("Back_End_Dot_Net.Models.Image", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessTime")
                         .HasColumnType("int");
@@ -136,11 +132,9 @@ namespace Back_End_Dot_Net.Migrations
 
             modelBuilder.Entity("Back_End_Dot_Net.Models.Laptop", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessTime")
                         .HasColumnType("int");
@@ -241,11 +235,9 @@ namespace Back_End_Dot_Net.Migrations
 
             modelBuilder.Entity("Back_End_Dot_Net.Models.Phone", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessTime")
                         .HasColumnType("int");

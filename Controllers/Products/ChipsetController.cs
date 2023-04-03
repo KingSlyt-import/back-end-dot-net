@@ -93,6 +93,8 @@ namespace Back_End_Dot_Net.Controllers
         [HttpPost]
         public async Task<ActionResult<Chipset>> CreateLaptop(Chipset chipset)
         {
+            chipset.Id = Guid.NewGuid();
+
             _dbContext.Chipsets.Add(chipset);
             await _dbContext.SaveChangesAsync();
 
