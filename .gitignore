@@ -2,7 +2,6 @@
 *.vsidx
 *.v2
 *.cache
-*.dll
 *.suo
 *.user
 *.sdf
@@ -29,5 +28,3 @@ TestResult.xml
 Version.cs
 Version.h
 Version.cpp
-
-appsettings.json
