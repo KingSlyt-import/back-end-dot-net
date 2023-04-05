@@ -16,9 +16,28 @@ namespace Back_End_Dot_Net.Controllers
             _dbContext = dbContext;
         }
 
-        [Route("get-chipset")]
+        [Route("get-all-chipset")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Chipset>>> GetChipset()
+        public async Task<ActionResult<IEnumerable<Laptop>>> GetAllChipset()
+        {
+            if (_dbContext.Phones == null)
+            {
+                return NotFound();
+            }
+
+            var phone = await _dbContext.Chipsets.ToListAsync();
+
+            if (phone == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(phone);
+        }
+
+        [Route("get-chipsets")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Chipset>>> GetChipsets()
         {
             if (_dbContext.Chipsets == null)
             {
@@ -89,14 +108,32 @@ namespace Back_End_Dot_Net.Controllers
 
         [Route("create-chipset")]
         [HttpPost]
-        public async Task<ActionResult<Chipset>> CreateLaptop(Chipset chipset)
+        public async Task<ActionResult<Chipset>> CreateChipset(Chipset chipset)
         {
+            Console.Write(chipset);
+
             chipset.Id = Guid.NewGuid();
 
             _dbContext.Chipsets.Add(chipset);
             await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetChipset), new { name = chipset.Name }, chipset);
+            return CreatedAtAction(nameof(GetChipsets), new { name = chipset.Name }, chipset);
+        }
+
+        [Route("create-chipsets")]
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<Chipset>>> CreateChipsets(IEnumerable<Chipset> chipsets)
+        {
+            foreach (var chipset in chipsets)
+            {
+                chipset.Id = Guid.NewGuid();
+
+                _dbContext.Chipsets.Add(chipset);
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetChipsets), chipsets);
         }
     }
 }

@@ -7,7 +7,6 @@ namespace Back_End_Dot_Net.Models
     public class Chipset
     {
         // Overview
-        [JsonIgnore]
         public Guid Id { get; set; }
 
         [Required]
@@ -20,10 +19,10 @@ namespace Back_End_Dot_Net.Models
 
         public string? Manufacture { get; set; }
 
-        public string[]? Type { get; set; }
+        public ChipsetType Type { get; set; }
 
         [DisplayName("CPU Socket")]
-        public string[]? CPUSocket { get; set; }
+        public ChipsetSocket CPUSocket { get; set; }
 
         [DisplayName("CPU Temperature")]
         public int CPUTemp { get; set; }
@@ -51,17 +50,16 @@ namespace Back_End_Dot_Net.Models
         public int MemoryChannels { get; set; }
 
         [DisplayName("Performance Features")]
-        public string[]? ChipsetPerformanceFeatures { get; set; }
+        public IEnumerable<string>? ChipsetPerformanceFeatures { get; set; }
 
         // RAM Support
         [DisplayName("DDR Version")]
-        public string[]? ChipsetRAMVersion { get; set; }
+        public ChipsetRAMVersion ChipsetRAMVersion { get; set; }
 
         [DisplayName("RAM Speed")]
         public int RAMSpeed { get; set; }
 
         // navigation property for laptops
-        [JsonIgnore]
         public ICollection<Laptop>? Laptops { get; set; }
 
         // Others

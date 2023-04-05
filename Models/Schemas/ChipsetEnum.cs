@@ -18,7 +18,8 @@ public enum ChipsetSocket
     LGA1700,
     LGA2066,
     sTRX4,
-    FCBGA1744
+    FCBGA1744,
+    FP6
 }
 
 public enum ChipsetRAMVersion
