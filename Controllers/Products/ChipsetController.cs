@@ -60,7 +60,9 @@ namespace Back_End_Dot_Net.Controllers
                     chipset.CpuThread,
                     chipset.semiconductorSize,
                     chipset.Manufacture,
-                    chipset.MemoryChannels
+                    chipset.MemoryChannels,
+                    chipset.TDP,
+                    chipset.RAMSpeed
                 })
                 .ToListAsync();
 
