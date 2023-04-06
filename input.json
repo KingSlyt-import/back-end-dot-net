@@ -1,21 +1,40 @@
 {
   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "name": "AMD Ryzen™ R5 5500U",
-  "image": "https://images.versus.io/objects/amd-ryzen-5-5500u.front.variety.1611262270009.jpg",
-  "description": "Whether you are playing the latest games, designing the next skyscraper, or crunching data, you need a powerful processor that can handle it all",
-  "manufacture": "AMD",
-  "type": "Laptop",
-  "cpuSocket": "FP6",
-  "cpuTemp": 105,
-  "tdp": 25,
-  "cpuSpeedBase": 2.1,
-  "cpuSpeedBoost": 4,
-  "cpuThread": 12,
-  "semiconductorSize": 7,
-  "pci": 3,
-  "memoryChannels": 2,
-  "chipsetPerformanceFeatures": [],
-  "chipsetRAMVersion": "DDR4",
-  "ramSpeed": 3200,
-  "laptops": []
+  "name": "string",
+  "price": 0,
+  "image": "string",
+  "description": "string",
+  "manufacture": "string",
+  "cpuName": "string",
+  "cpuType": "string",
+  "cpuSpeedBase": 0,
+  "cpuSpeedBoost": 0,
+  "ram": 0,
+  "ramSpeed": 0,
+  "inStorage": 0,
+  "phonePerformanceFeatures": [
+    "string"
+  ],
+  "screenSize": 0,
+  "resolution": "string",
+  "screenHz": 0,
+  "nits": 0,
+  "ppi": 0,
+  "phoneScreenFeatures": [
+    "string"
+  ],
+  "weight": 0,
+  "height": 0,
+  "width": 0,
+  "phoneDesignFeatures": [
+    "string"
+  ],
+  "mainCameraMP": "string",
+  "frontCameraMP": 0,
+  "batteryPower": 0,
+  "charging": 0,
+  "magSafe": false,
+  "phoneFeatures": [
+    "string"
+  ]
 }

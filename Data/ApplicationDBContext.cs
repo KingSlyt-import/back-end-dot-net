@@ -33,11 +33,11 @@ namespace Back_End_Dot_Net.Data
 
             // Chipset Model
             modelBuilder.Entity<Chipset>()
-            .Property(e => e.ChipsetPerformanceFeatures)
-            .HasConversion(
-                v => v == null? null : string.Join(',', v),
-                v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
-            .Metadata.SetValueComparer(valueComparer);
+                .Property(e => e.ChipsetPerformanceFeatures)
+                .HasConversion(
+                    v => v == null ? null : string.Join(',', v),
+                    v => v == null ? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                .Metadata.SetValueComparer(valueComparer);
 
             // Laptop Model
             modelBuilder.Entity<Laptop>()
@@ -67,25 +67,25 @@ namespace Back_End_Dot_Net.Data
 
             // Phone Model
             modelBuilder.Entity<Phone>()
-            .Property(e => e.PerformanceFeatures)
+            .Property(e => e.PhonePerformanceFeatures)
             .HasConversion(
                 v => v == null? null : string.Join(',', v),
                 v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
             .Metadata.SetValueComparer(valueComparer);
             modelBuilder.Entity<Phone>()
-            .Property(e => e.ScreenFeatures)
+            .Property(e => e.PhoneScreenFeatures)
             .HasConversion(
                 v => v == null? null : string.Join(',', v),
                 v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
             .Metadata.SetValueComparer(valueComparer);
             modelBuilder.Entity<Phone>()
-            .Property(e => e.DesignFeatures)
+            .Property(e => e.PhoneDesignFeatures)
             .HasConversion(
                 v => v == null? null : string.Join(',', v),
                 v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
             .Metadata.SetValueComparer(valueComparer);
             modelBuilder.Entity<Phone>()
-            .Property(e => e.Features)
+            .Property(e => e.PhoneFeatures)
             .HasConversion(
                 v => v == null? null : string.Join(',', v),
                 v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))

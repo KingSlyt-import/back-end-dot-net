@@ -19,9 +19,11 @@ namespace Back_End_Dot_Net.Models
 
         public string? Manufacture { get; set; }
 
+        [EnumDataType(typeof(ChipsetType))]
         public ChipsetType Type { get; set; }
 
         [DisplayName("CPU Socket")]
+        [EnumDataType(typeof(ChipsetSocket))]
         public ChipsetSocket CPUSocket { get; set; }
 
         [DisplayName("CPU Temperature")]
@@ -54,6 +56,7 @@ namespace Back_End_Dot_Net.Models
 
         // RAM Support
         [DisplayName("DDR Version")]
+        [EnumDataType(typeof(ChipsetRAMVersion))]
         public ChipsetRAMVersion ChipsetRAMVersion { get; set; }
 
         [DisplayName("RAM Speed")]
