@@ -105,7 +105,7 @@ namespace Back_End_Dot_Net.Controllers
                     chipset.CpuSpeedBase,
                     chipset.CpuSpeedBoost,
                     chipset.CpuThread,
-                    chipset.ChipsetPerformanceFeatures
+                    chipset.ChipsetPerformanceFeatures,
                     // Memory info
                     chipset.RAMSpeed,
                     chipset.ChipsetRAMVersion,
