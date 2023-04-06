@@ -91,14 +91,25 @@ namespace Back_End_Dot_Net.Controllers
                 .Where(chipset => chipset.Name == name)
                 .Select(chipset => new
                 {
+                    // Overview info
                     chipset.Name,
                     chipset.Image,
+                    // General info
+                    chipset.Type,
+                    chipset.CPUSocket,
+                    chipset.TDP,
+                    chipset.semiconductorSize,
+                    chipset.CPUTemp,
+                    chipset.Pci,
+                    // Performance info
                     chipset.CpuSpeedBase,
                     chipset.CpuSpeedBoost,
                     chipset.CpuThread,
-                    chipset.semiconductorSize,
-                    chipset.Manufacture,
-                    chipset.MemoryChannels,
+                    chipset.ChipsetPerformanceFeatures
+                    // Memory info
+                    chipset.RAMSpeed,
+                    chipset.ChipsetRAMVersion,
+                    chipset.MemoryChannels
                 })
                 .ToListAsync();
 
