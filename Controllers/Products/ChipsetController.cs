@@ -1,5 +1,6 @@
 ﻿using Back_End_Dot_Net.Data;
 using Back_End_Dot_Net.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -220,8 +221,8 @@ namespace Back_End_Dot_Net.Controllers
         }
 
         [Route("update-chipset/{id}")]
-        [HttpPut]
-        public async Task<ActionResult<Chipset>> UpdateChipset(Guid id, Chipset chipset)
+        [HttpPatch]
+        public async Task<ActionResult<Chipset>> UpdateChipset(Guid id, [FromBody] JsonPatchDocument<Chipset> chipsetPatch)
         {
             var existingChipset = await _dbContext.Chipsets.FindAsync(id);
             if (existingChipset == null)
@@ -229,29 +230,19 @@ namespace Back_End_Dot_Net.Controllers
                 return NotFound();
             }
 
+            // Apply the patch to the existing phone object
+            chipsetPatch.ApplyTo(existingChipset);
+
             // Validate against schemas that define along with model
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            // Validate duplicate chipset
-            if (existingChipset.Name.ToLower() != chipset.Name.ToLower())
-            {
-                var duplicateChipset = await _dbContext.Chipsets.FirstOrDefaultAsync(c => c.Name.ToLower() == chipset.Name.ToLower());
-                if (duplicateChipset != null)
-                {
-                    var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                    errorMessage.AddError($"A chipset with the name '{chipset.Name}' already exists.");
-
-                    return BadRequest(errorMessage);
-                }
-            }
-
             // Validate Performance Features
-            if (chipset.ChipsetPerformanceFeatures != null)
+            if (existingChipset.ChipsetPerformanceFeatures != null)
             {
-                foreach (var feature in chipset.ChipsetPerformanceFeatures)
+                foreach (var feature in existingChipset.ChipsetPerformanceFeatures)
                 {
                     if (!Enum.IsDefined(typeof(ChipsetPerformanceFeatures), feature))
                     {
@@ -263,25 +254,7 @@ namespace Back_End_Dot_Net.Controllers
                 }
             }
 
-            // Update the existing chipset with the values from the incoming chipset
-            existingChipset.Name = chipset.Name;
-            existingChipset.Image = chipset.Image;
-            existingChipset.Description = chipset.Description;
-            existingChipset.Manufacture = chipset.Manufacture;
-            existingChipset.Type = chipset.Type;
-            existingChipset.CPUSocket = chipset.CPUSocket;
-            existingChipset.CPUTemp = chipset.CPUTemp;
-            existingChipset.TDP = chipset.TDP;
-            existingChipset.CpuSpeedBase = chipset.CpuSpeedBase;
-            existingChipset.CpuSpeedBoost = chipset.CpuSpeedBoost;
-            existingChipset.CpuThread = chipset.CpuThread;
-            existingChipset.semiconductorSize = chipset.semiconductorSize;
-            existingChipset.Pci = chipset.Pci;
-            existingChipset.MemoryChannels = chipset.MemoryChannels;
-            existingChipset.ChipsetPerformanceFeatures = chipset.ChipsetPerformanceFeatures;
-            existingChipset.ChipsetRAMVersion = chipset.ChipsetRAMVersion;
-            existingChipset.RAMSpeed = chipset.RAMSpeed;
-
+            // Save the changes to the database
             await _dbContext.SaveChangesAsync();
 
             return Ok(existingChipset);

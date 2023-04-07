@@ -1,5 +1,6 @@
 ﻿using Back_End_Dot_Net.Data;
 using Back_End_Dot_Net.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -237,6 +238,7 @@ namespace Back_End_Dot_Net.Controllers
 
             _dbContext.Phones.Add(phone);
             await _dbContext.SaveChangesAsync();
+            
             return CreatedAtAction(nameof(GetPhones), new { id = phone.Id }, phone);
         }
 
@@ -253,14 +255,17 @@ namespace Back_End_Dot_Net.Controllers
         }
 
         [Route("update-phones/{id}")]
-        [HttpPut]
-        public async Task<ActionResult<Phone>> UpdatePhone(Guid id, Phone phone)
+        [HttpPatch]
+        public async Task<ActionResult<Phone>> UpdatePhone(Guid id, [FromBody] JsonPatchDocument<Phone> phonePatch)
         {
             var existingPhone = await _dbContext.Phones.FindAsync(id);
             if (existingPhone == null)
             {
                 return NotFound();
             }
+
+            // Apply the patch to the existing phone object
+            phonePatch.ApplyTo(existingPhone);
 
             // Validate against schemas that define along with model
             if (!ModelState.IsValid)
@@ -269,9 +274,9 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             // Validate Performance Features
-            if (phone.PhonePerformanceFeatures != null)
+            if (existingPhone.PhonePerformanceFeatures != null)
             {
-                foreach (var feature in phone.PhonePerformanceFeatures)
+                foreach (var feature in existingPhone.PhonePerformanceFeatures)
                 {
                     if (!Enum.IsDefined(typeof(PhonePerformanceFeatures), feature))
                     {
@@ -284,9 +289,9 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             // Validate Screen Features
-            if (phone.PhoneScreenFeatures != null)
+            if (existingPhone.PhoneScreenFeatures != null)
             {
-                foreach (var feature in phone.PhoneScreenFeatures)
+                foreach (var feature in existingPhone.PhoneScreenFeatures)
                 {
                     if (!Enum.IsDefined(typeof(PhoneScreenFeatures), feature))
                     {
@@ -299,9 +304,9 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             // Validate Design Features
-            if (phone.PhoneDesignFeatures != null)
+            if (existingPhone.PhoneDesignFeatures != null)
             {
-                foreach (var feature in phone.PhoneDesignFeatures)
+                foreach (var feature in existingPhone.PhoneDesignFeatures)
                 {
                     if (!Enum.IsDefined(typeof(PhoneDesignFeatures), feature))
                     {
@@ -314,9 +319,9 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             // Validate Features
-            if (phone.PhoneFeatures != null)
+            if (existingPhone.PhoneFeatures != null)
             {
-                foreach (var feature in phone.PhoneFeatures)
+                foreach (var feature in existingPhone.PhoneFeatures)
                 {
                     if (!Enum.IsDefined(typeof(PhoneFeatures), feature))
                     {
@@ -328,37 +333,7 @@ namespace Back_End_Dot_Net.Controllers
                 }
             }
 
-            // Update the existing phone with the values from the incoming phone
-            existingPhone.Name = phone.Name;
-            existingPhone.Price = phone.Price;
-            existingPhone.Image = phone.Image;
-            existingPhone.Description = phone.Description;
-            existingPhone.Manufacture = phone.Manufacture;
-            existingPhone.CPUName = phone.CPUName;
-            existingPhone.CPUType = phone.CPUType;
-            existingPhone.CPUSpeedBase = phone.CPUSpeedBase;
-            existingPhone.CPUSpeedBoost = phone.CPUSpeedBoost;
-            existingPhone.RAM = phone.RAM;
-            existingPhone.RAMSpeed = phone.RAMSpeed;
-            existingPhone.InStorage = phone.InStorage;
-            existingPhone.PhonePerformanceFeatures = phone.PhonePerformanceFeatures;
-            existingPhone.ScreenSize = phone.ScreenSize;
-            existingPhone.Resolution = phone.Resolution;
-            existingPhone.ScreenHz = phone.ScreenHz;
-            existingPhone.Nits = phone.Nits;
-            existingPhone.Ppi = phone.Ppi;
-            existingPhone.PhoneScreenFeatures = phone.PhoneScreenFeatures;
-            existingPhone.Weight = phone.Weight;
-            existingPhone.Height = phone.Height;
-            existingPhone.Width = phone.Width;
-            existingPhone.PhoneDesignFeatures = phone.PhoneDesignFeatures;
-            existingPhone.MainCameraMP = phone.MainCameraMP;
-            existingPhone.FrontCameraMP = phone.FrontCameraMP;
-            existingPhone.BatteryPower = phone.BatteryPower;
-            existingPhone.Charging = phone.Charging;
-            existingPhone.MagSafe = phone.MagSafe;
-            existingPhone.PhoneFeatures = phone.PhoneFeatures;
-
+            // Save the changes to the database
             await _dbContext.SaveChangesAsync();
 
             return Ok(existingPhone);
