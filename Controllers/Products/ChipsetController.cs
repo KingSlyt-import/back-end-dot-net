@@ -25,7 +25,9 @@ namespace Back_End_Dot_Net.Controllers
                 return NotFound();
             }
 
-            var chipsets = await _dbContext.Chipsets.ToListAsync();
+            var chipsets = await _dbContext.Chipsets
+                .Where(chipset => chipset.Hide == false)
+                .ToListAsync();
 
             if (chipsets == null)
             {
@@ -51,6 +53,7 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             var chipsets = await _dbContext.Chipsets
+                .Where(chipset => chipset.Hide == false)
                 .Select(chipset => new
                 {
                     chipset.Name,
@@ -90,7 +93,10 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             var chipset = await _dbContext.Chipsets
-                .Where(chipset => chipset.Name == name)
+                .Where(chipset => 
+                    chipset.Name == name &&
+                    chipset.Hide == false
+                )
                 .Select(chipset => new
                 {
                     // Overview info
@@ -129,11 +135,12 @@ namespace Back_End_Dot_Net.Controllers
             return Ok(response);
         }
 
-        [Route("top-5-accessed-Chipsets")]
+        [Route("top-5-accessed-chipsets")]
         [HttpGet]
         public IActionResult GetTop5AccessedChipsets()
         {
             var top5Chipsets = _dbContext.Chipsets
+                .Where(chipset => chipset.Hide == false)
                 .Select(chipset => new
                 {
                     chipset.Id,

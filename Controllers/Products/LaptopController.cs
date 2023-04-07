@@ -25,26 +25,35 @@ namespace Back_End_Dot_Net.Controllers
                 return NotFound();
             }
 
-            var phone = await _dbContext.Laptops.ToListAsync();
+            var laptops = await _dbContext.Laptops
+                .Where(phone => phone.Hide == false)
+                .ToListAsync();
 
-            if (phone == null)
+            if (laptops == null)
             {
                 return NotFound();
             }
 
-            return Ok(phone);
+            var response = new
+            {
+                Total = laptops.Count(),
+                Data = laptops
+            };
+
+            return Ok(response);
         }
 
         [Route("get-laptops")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Laptop>>> GetLaptop()
+        public async Task<ActionResult<IEnumerable<Laptop>>> GetLaptops()
         {
             if (_dbContext.Phones == null)
             {
                 return NotFound();
             }
 
-            var phone = await _dbContext.Laptops
+            var laptops = await _dbContext.Laptops
+                .Where(phone => phone.Hide == false)
                 .Select(laptop => new
                 {
                     laptop.Name,
@@ -58,12 +67,18 @@ namespace Back_End_Dot_Net.Controllers
                 })
                 .ToListAsync();
 
-            if (phone == null)
+            if (laptops == null)
             {
                 return NotFound();
             }
 
-            return Ok(phone);
+            var response = new
+            {
+                Total = laptops.Count(),
+                Data = laptops
+            };
+
+            return Ok(response);        
         }
 
         [Route("get-laptop-by-name/{name}")]
@@ -75,7 +90,7 @@ namespace Back_End_Dot_Net.Controllers
                 return NotFound();
             }
 
-            var phone = await _dbContext.Laptops
+            var laptop = await _dbContext.Laptops
                 .Where(laptop => laptop.Name == name)
                 .Select(laptop => new
                 {
@@ -90,21 +105,44 @@ namespace Back_End_Dot_Net.Controllers
                 })
                 .ToListAsync();
 
-            if (phone == null)
+            if (laptop == null)
             {
                 return NotFound();
             }
 
-            return Ok(phone);
-        }
+            var response = new
+            {
+                Total = laptop.Count(),
+                Data = laptop
+            };
+
+            return Ok(response);         }
 
         [Route("top-5-accessed-laptops")]
         [HttpGet]
         public IActionResult GetTop5AccessedLaptops()
         {
-            var top5Laptops = _dbContext.Laptops.OrderByDescending(p => p.AccessTime).Take(5).ToList();
-            return Ok(top5Laptops);
-        }
+            var top5Laptops = _dbContext.Laptops
+               .Where(laptop => laptop.Hide == false)
+                .Select(laptop => new
+                {
+                    laptop.Id,
+                    laptop.Name,
+                    laptop.Image,
+                    laptop.AccessTime,
+                    laptop.CreatedDate
+                })
+                .OrderByDescending(p => p.AccessTime)
+                .Take(5)
+                .ToList();
+
+            var response = new
+            {
+                Total = top5Laptops.Count(),
+                Data = top5Laptops
+            };
+
+            return Ok(response);         }
 
         [Route("create-laptop")]
         [HttpPost]
@@ -115,7 +153,24 @@ namespace Back_End_Dot_Net.Controllers
             _dbContext.Laptops.Add(laptop);
             await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetLaptop), new { name = laptop.Name }, laptop);
+            return CreatedAtAction(nameof(GetLaptops), new { name = laptop.Name }, laptop);
+        }
+
+        [Route("delete-laptop/{id}")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteLaptop(Guid id)
+        {
+            var laptopToDelete = await _dbContext.Laptops.FindAsync(id);
+
+            if (laptopToDelete == null)
+            {
+                return NotFound();
+            }
+
+            _dbContext.Laptops.Remove(laptopToDelete);
+            await _dbContext.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

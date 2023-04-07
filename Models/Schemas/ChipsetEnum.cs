@@ -3,7 +3,8 @@ using System.ComponentModel.DataAnnotations;
 public enum ChipsetType
 {
     Laptop,
-    Desktop
+    Desktop,
+    Phone
 }
 
 public enum ChipsetSocket

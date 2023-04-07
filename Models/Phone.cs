@@ -28,6 +28,7 @@ namespace Back_End_Dot_Net.Models
         public string? CPUName { get; set; }
 
         [DisplayName("CPU Type")]
+        [EnumDataType(typeof(ChipsetType))]
         public string? CPUType { get; set; }
 
         [DisplayName("Base CPU Speed")]

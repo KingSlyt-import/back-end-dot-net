@@ -25,7 +25,9 @@ namespace Back_End_Dot_Net.Controllers
                 return NotFound();
             }
 
-            var phones = await _dbContext.Phones.ToListAsync();
+            var phones = await _dbContext.Phones
+                .Where(phone => phone.Hide == false)
+                .ToListAsync();
 
             if (phones == null)
             {
@@ -51,6 +53,7 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             var phone = await _dbContext.Phones
+                .Where(phone => phone.Hide == false)
                 .Select(phone => new
                 {
                     phone.Name,
@@ -88,7 +91,10 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             var phone = await _dbContext.Phones
-                .Where(phone => phone.Name == name)
+                .Where(phone =>
+                    phone.Name == name &&
+                    phone.Hide == false
+                )
                 .Select(phone => new
                 {
                     phone.Name,
@@ -123,6 +129,7 @@ namespace Back_End_Dot_Net.Controllers
         public IActionResult GetTop5AccessedPhones()
         {
             var top5Phones = _dbContext.Phones
+                .Where(phone => phone.Hide == false)
                 .Select(phone => new
                 {
                     phone.Id,

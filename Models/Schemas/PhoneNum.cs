@@ -20,6 +20,12 @@ public enum PhonePerformanceFeatures
     TrustZone,
     [Display(Name = "NX Bit")]
     NXBit,
+    [Display(Name = "AI Neural Engine")]
+    AINeuralEngine,
+    [Display(Name = "Advanced Image Signal Processor")]
+    AdvancedImageSignalProcessor,
+    [Display(Name = "Secure Enclave")]
+    SecureEnclave,
     MultiThreading,
 }
 
@@ -31,6 +37,8 @@ public enum PhoneScreenFeatures
     SapphireGlassDisplay,
     [Display(Name = "Always On Display")]
     AlwaysOnDisplay,
+    [Display(Name = "Dynamic AMOLED 2X")]
+    DynamicAMOLED2X,
     [Display(Name = "Secondary Screen")]
     SecondaryScreen,
     [Display(Name = "Curved Display")]
@@ -45,6 +53,12 @@ public enum PhoneScreenFeatures
     HDR10Plus,
     [Display(Name = "HDR 10")]
     HDR10,
+    [Display(Name = "Ceramic Shield Front Cover")]
+    CeramicShieldFrontCover,
+    [Display(Name = "Super Retina XDR Display")]
+    SuperRetinaXDRDisplay,
+    [Display(Name = "ProMotion Technology")]
+    ProMotionTechnology
 }
 
 public enum PhoneDesignFeatures
@@ -57,6 +71,8 @@ public enum PhoneDesignFeatures
     DustResistance,
     [Display(Name = "Fanless Design")]
     FanlessDesign,
+    [Display(Name = "Ceramic Shield")]
+    CeramicShield,
     [Display(Name = "Water Sealed")]
     WaterSealed,
     Foldable
@@ -82,6 +98,8 @@ public enum PhoneFeatures
     FacialRecognition,
     [Display(Name = "Built In Projector")]
     BuiltInProjector,
+    [Display(Name = "Wireless charging")]
+    WirelessCharging,
     [Display(Name = "Optical Tracking")]
     OpticalTracking,
     [Display(Name = "Crash Detection")]
@@ -108,5 +126,5 @@ public enum PhoneFeatures
     Barometer,
     Gyroscope,
     Compass,
-    GPS,
+    GPS
 }
