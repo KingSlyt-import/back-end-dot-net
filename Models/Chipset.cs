@@ -52,17 +52,18 @@ namespace Back_End_Dot_Net.Models
         public int MemoryChannels { get; set; }
 
         [DisplayName("Performance Features")]
-        public IEnumerable<string>? ChipsetPerformanceFeatures { get; set; }
+        public IEnumerable<string>? PerformanceFeatures { get; set; }
 
         // RAM Support
         [DisplayName("DDR Version")]
         [EnumDataType(typeof(ChipsetRAMVersion))]
-        public ChipsetRAMVersion ChipsetRAMVersion { get; set; }
+        public ChipsetRAMVersion RAMVersion { get; set; }
 
         [DisplayName("RAM Speed")]
         public int RAMSpeed { get; set; }
 
         // navigation property for laptops
+        [JsonIgnore]
         public ICollection<Laptop>? Laptops { get; set; }
 
         // Others

@@ -2,21 +2,17 @@ namespace Back_End_Dot_Net.Models
 {
     public class ErrorResponse
     {
-        private ErrorTitle validationTitle;
-        private ErrorStatus badRequest;
-        private ErrorType validation;
-
         public string? Title { get; set; }
         public int? Status { get; set; }
         public string? Type { get; set; }
 
         public List<string> Errors { get; set; }
 
-        public ErrorResponse(ErrorTitle validationTitle, ErrorStatus badRequest, ErrorType validation)
+        public ErrorResponse(ErrorTitle title, ErrorStatus status, ErrorType type)
         {
-            this.validationTitle = validationTitle;
-            this.badRequest = badRequest;
-            this.validation = validation;
+            Title = title.GetDisplayName();
+            Status = (int)status;
+            Type = type.ToString();
             Errors = new List<string>();
         }
 

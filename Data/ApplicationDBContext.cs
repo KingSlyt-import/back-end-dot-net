@@ -33,7 +33,7 @@ namespace Back_End_Dot_Net.Data
 
             // Chipset Model
             modelBuilder.Entity<Chipset>()
-                .Property(e => e.ChipsetPerformanceFeatures)
+                .Property(e => e.PerformanceFeatures)
                 .HasConversion(
                     v => v == null ? null : string.Join(',', v),
                     v => v == null ? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
@@ -67,25 +67,25 @@ namespace Back_End_Dot_Net.Data
 
             // Phone Model
             modelBuilder.Entity<Phone>()
-            .Property(e => e.PhonePerformanceFeatures)
+            .Property(e => e.PerformanceFeatures)
             .HasConversion(
                 v => v == null? null : string.Join(',', v),
                 v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
             .Metadata.SetValueComparer(valueComparer);
             modelBuilder.Entity<Phone>()
-            .Property(e => e.PhoneScreenFeatures)
+            .Property(e => e.ScreenFeatures)
             .HasConversion(
                 v => v == null? null : string.Join(',', v),
                 v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
             .Metadata.SetValueComparer(valueComparer);
             modelBuilder.Entity<Phone>()
-            .Property(e => e.PhoneDesignFeatures)
+            .Property(e => e.DesignFeatures)
             .HasConversion(
                 v => v == null? null : string.Join(',', v),
                 v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
             .Metadata.SetValueComparer(valueComparer);
             modelBuilder.Entity<Phone>()
-            .Property(e => e.PhoneFeatures)
+            .Property(e => e.Features)
             .HasConversion(
                 v => v == null? null : string.Join(',', v),
                 v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))

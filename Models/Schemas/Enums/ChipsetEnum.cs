@@ -1,10 +1,11 @@
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 public enum ChipsetType
 {
     Laptop,
     Desktop,
-    Phone
+    Phone,
+    All
 }
 
 public enum ChipsetSocket
@@ -20,21 +21,27 @@ public enum ChipsetSocket
     LGA2066,
     sTRX4,
     FCBGA1744,
-    FP6
+    FP6,
+    BGA
 }
 
 public enum ChipsetRAMVersion
 {
     DDR3,
     DDR4,
-    DDR5
+    LPDDR4X,
+    DDR5,
 }
 
 public enum ChipsetPerformanceFeatures
 {
-    [Display(Name = "Unlocked Multiplier")]
+    [Description("Unlocked Multiplier")]
     UnlockedMultiplier,
-    [Display(Name = "Big.LITTLE Technology")]
+    [Description("Big.LITTLE Technology")]
     BigLittleTechnology,
+    [Description("Neural Engine")]
+    NeuralEngine,
+    [Description("Unified Memory Architecture")]
+    UnifiedMemoryArchitecture,
     HMP,
 }

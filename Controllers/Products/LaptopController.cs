@@ -78,7 +78,7 @@ namespace Back_End_Dot_Net.Controllers
                 Data = laptops
             };
 
-            return Ok(response);        
+            return Ok(response);
         }
 
         [Route("get-laptop-by-name/{name}")]
@@ -116,7 +116,8 @@ namespace Back_End_Dot_Net.Controllers
                 Data = laptop
             };
 
-            return Ok(response);         }
+            return Ok(response);
+        }
 
         [Route("top-5-accessed-laptops")]
         [HttpGet]
@@ -142,18 +143,92 @@ namespace Back_End_Dot_Net.Controllers
                 Data = top5Laptops
             };
 
-            return Ok(response);         }
+            return Ok(response);
+        }
 
         [Route("create-laptop")]
         [HttpPost]
         public async Task<ActionResult<Laptop>> CreateLaptop(Laptop laptop)
         {
+            // Validate duplicate phone
+            var existingLaptop = await _dbContext.Laptops
+                .FirstOrDefaultAsync(p => p.Name.ToLower() == laptop.Name.ToLower());
+            if (existingLaptop != null)
+            {
+                var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
+                errorMessage.AddError($"A laptop with the name '{laptop.Name}' already exists.");
+
+                return BadRequest(errorMessage);
+            }
+
+            // Validate Performance Features
+            if (laptop.PerformanceFeatures != null)
+            {
+                foreach (var feature in laptop.PerformanceFeatures)
+                {
+                    if (!Enum.IsDefined(typeof(LaptopPerformanceFeatures), feature))
+                    {
+                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
+                        errorMessage.AddError($"The value '{feature}' is not a valid LaptopPerformanceFeatures value.");
+
+                        return BadRequest(errorMessage);
+                    }
+                }
+            }
+
+            // Validate Screen Features
+            if (laptop.ScreenFeatures != null)
+            {
+                foreach (var feature in laptop.ScreenFeatures)
+                {
+                    if (!Enum.IsDefined(typeof(LaptopScreenFeatures), feature))
+                    {
+                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
+                        errorMessage.AddError($"The value '{feature}' is not a valid LaptopScreenFeatures value.");
+
+                        return BadRequest(errorMessage);
+                    }
+                }
+            }
+
+            // Validate Design Features
+            if (laptop.DesignFeatures != null)
+            {
+                foreach (var feature in laptop.DesignFeatures)
+                {
+                    if (!Enum.IsDefined(typeof(LaptopDesignFeatures), feature))
+                    {
+                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
+                        errorMessage.AddError($"The value '{feature}' is not a valid LaptopDesignFeatures value.");
+
+                        return BadRequest(errorMessage);
+                    }
+                }
+            }
+
+            // Validate Features
+            if (laptop.Features != null)
+            {
+                foreach (var feature in laptop.Features)
+                {
+                    if (!Enum.IsDefined(typeof(LaptopFeatures), feature))
+                    {
+                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
+                        errorMessage.AddError($"The value '{feature}' is not a valid LaptopFeatures value.");
+
+                        return BadRequest(errorMessage);
+                    }
+                }
+            }
+
             laptop.Id = Guid.NewGuid();
 
-            _dbContext.Laptops.Add(laptop);
-            await _dbContext.SaveChangesAsync();
+            return laptop;
 
-            return CreatedAtAction(nameof(GetLaptops), new { name = laptop.Name }, laptop);
+            // _dbContext.Laptops.Add(laptop);
+            // await _dbContext.SaveChangesAsync();
+
+            // return CreatedAtAction(nameof(GetLaptops), new { name = laptop.Name }, laptop);
         }
 
         [Route("delete-laptop/{id}")]
