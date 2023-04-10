@@ -1,8 +1,11 @@
-﻿using Back_End_Dot_Net.Data;
+﻿using System.ComponentModel;
+using System.Reflection;
+using Back_End_Dot_Net.Data;
 using Back_End_Dot_Net.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Back_End_Dot_Net.Controllers
 {
@@ -94,7 +97,7 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             var chipset = await _dbContext.Chipsets
-                .Where(chipset => 
+                .Where(chipset =>
                     chipset.Name == name &&
                     chipset.Hide == false
                 )
@@ -114,10 +117,10 @@ namespace Back_End_Dot_Net.Controllers
                     chipset.CpuSpeedBase,
                     chipset.CpuSpeedBoost,
                     chipset.CpuThread,
-                    chipset.ChipsetPerformanceFeatures,
+                    chipset.PerformanceFeatures,
                     // Memory info
                     chipset.RAMSpeed,
-                    chipset.ChipsetRAMVersion,
+                    chipset.RAMVersion,
                     chipset.MemoryChannels
                 })
                 .ToListAsync();
@@ -185,11 +188,19 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             // Validate Performance Features
-            if (chipset.ChipsetPerformanceFeatures != null)
+            if (chipset.PerformanceFeatures != null)
             {
-                foreach (var feature in chipset.ChipsetPerformanceFeatures)
+                foreach (var feature in chipset.PerformanceFeatures)
                 {
-                    if (!Enum.IsDefined(typeof(ChipsetPerformanceFeatures), feature))
+                    // Get the description of the enum value
+                    var descriptionAttribute = typeof(ChipsetPerformanceFeatures)
+                        .GetMember(feature.ToString())
+                        .FirstOrDefault()?
+                        .GetCustomAttribute<DescriptionAttribute>();
+
+                    Log.Information("The value of descriptionAttribute is {Value}", descriptionAttribute);
+
+                    if (descriptionAttribute == null)
                     {
                         var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
                         errorMessage.AddError($"The value '{feature}' is not a valid ChipsetPerformanceFeatures value.");
@@ -199,13 +210,15 @@ namespace Back_End_Dot_Net.Controllers
                 }
             }
 
+            return chipset;
+
             // Generate UUID for new item
-            chipset.Id = Guid.NewGuid();
+            // chipset.Id = Guid.NewGuid();
 
-            _dbContext.Chipsets.Add(chipset);
-            await _dbContext.SaveChangesAsync();
+            // _dbContext.Chipsets.Add(chipset);
+            // await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetChipsets), new { name = chipset.Name }, chipset);
+            // return CreatedAtAction(nameof(GetChipsets), new { name = chipset.Name }, chipset);
         }
 
         [Route("create-chipsets")]
@@ -240,9 +253,9 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             // Validate Performance Features
-            if (existingChipset.ChipsetPerformanceFeatures != null)
+            if (existingChipset.PerformanceFeatures != null)
             {
-                foreach (var feature in existingChipset.ChipsetPerformanceFeatures)
+                foreach (var feature in existingChipset.PerformanceFeatures)
                 {
                     if (!Enum.IsDefined(typeof(ChipsetPerformanceFeatures), feature))
                     {

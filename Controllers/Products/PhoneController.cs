@@ -174,9 +174,9 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             // Validate Performance Features
-            if (phone.PhonePerformanceFeatures != null)
+            if (phone.PerformanceFeatures != null)
             {
-                foreach (var feature in phone.PhonePerformanceFeatures)
+                foreach (var feature in phone.PerformanceFeatures)
                 {
                     if (!Enum.IsDefined(typeof(PhonePerformanceFeatures), feature))
                     {
@@ -189,9 +189,9 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             // Validate Screen Features
-            if (phone.PhoneScreenFeatures != null)
+            if (phone.ScreenFeatures != null)
             {
-                foreach (var feature in phone.PhoneScreenFeatures)
+                foreach (var feature in phone.ScreenFeatures)
                 {
                     if (!Enum.IsDefined(typeof(PhoneScreenFeatures), feature))
                     {
@@ -204,9 +204,9 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             // Validate Design Features
-            if (phone.PhoneDesignFeatures != null)
+            if (phone.DesignFeatures != null)
             {
-                foreach (var feature in phone.PhoneDesignFeatures)
+                foreach (var feature in phone.DesignFeatures)
                 {
                     if (!Enum.IsDefined(typeof(PhoneDesignFeatures), feature))
                     {
@@ -219,9 +219,9 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             // Validate Features
-            if (phone.PhoneFeatures != null)
+            if (phone.Features != null)
             {
-                foreach (var feature in phone.PhoneFeatures)
+                foreach (var feature in phone.Features)
                 {
                     if (!Enum.IsDefined(typeof(PhoneFeatures), feature))
                     {
@@ -274,9 +274,9 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             // Validate Performance Features
-            if (existingPhone.PhonePerformanceFeatures != null)
+            if (existingPhone.PerformanceFeatures != null)
             {
-                foreach (var feature in existingPhone.PhonePerformanceFeatures)
+                foreach (var feature in existingPhone.PerformanceFeatures)
                 {
                     if (!Enum.IsDefined(typeof(PhonePerformanceFeatures), feature))
                     {
@@ -289,9 +289,9 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             // Validate Screen Features
-            if (existingPhone.PhoneScreenFeatures != null)
+            if (existingPhone.ScreenFeatures != null)
             {
-                foreach (var feature in existingPhone.PhoneScreenFeatures)
+                foreach (var feature in existingPhone.ScreenFeatures)
                 {
                     if (!Enum.IsDefined(typeof(PhoneScreenFeatures), feature))
                     {
@@ -304,9 +304,9 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             // Validate Design Features
-            if (existingPhone.PhoneDesignFeatures != null)
+            if (existingPhone.DesignFeatures != null)
             {
-                foreach (var feature in existingPhone.PhoneDesignFeatures)
+                foreach (var feature in existingPhone.DesignFeatures)
                 {
                     if (!Enum.IsDefined(typeof(PhoneDesignFeatures), feature))
                     {
@@ -319,9 +319,9 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             // Validate Features
-            if (existingPhone.PhoneFeatures != null)
+            if (existingPhone.Features != null)
             {
-                foreach (var feature in existingPhone.PhoneFeatures)
+                foreach (var feature in existingPhone.Features)
                 {
                     if (!Enum.IsDefined(typeof(PhoneFeatures), feature))
                     {
