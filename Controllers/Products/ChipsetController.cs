@@ -5,6 +5,7 @@ using Back_End_Dot_Net.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 using Serilog;
 
 namespace Back_End_Dot_Net.Controllers
@@ -130,13 +131,7 @@ namespace Back_End_Dot_Net.Controllers
                 return NotFound();
             }
 
-            var response = new
-            {
-                Total = chipset.Count(),
-                Data = chipset
-            };
-
-            return Ok(response);
+            return Ok(chipset);
         }
 
         [Route("top-5-accessed-chipsets")]
@@ -210,15 +205,13 @@ namespace Back_End_Dot_Net.Controllers
                 }
             }
 
-            return chipset;
-
             // Generate UUID for new item
-            // chipset.Id = Guid.NewGuid();
+            chipset.Id = Guid.NewGuid();
 
-            // _dbContext.Chipsets.Add(chipset);
-            // await _dbContext.SaveChangesAsync();
+            _dbContext.Chipsets.Add(chipset);
+            await _dbContext.SaveChangesAsync();
 
-            // return CreatedAtAction(nameof(GetChipsets), new { name = chipset.Name }, chipset);
+            return CreatedAtAction(nameof(GetChipsets), new { name = chipset.Name }, chipset);
         }
 
         [Route("create-chipsets")]
