@@ -1,5 +1,6 @@
 ﻿using Back_End_Dot_Net.Data;
 using Back_End_Dot_Net.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,13 +21,13 @@ namespace Back_End_Dot_Net.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Laptop>>> GetAllLaptop()
         {
-            if (_dbContext.Phones == null)
+            if (_dbContext.Laptops == null)
             {
                 return NotFound();
             }
 
             var laptops = await _dbContext.Laptops
-                .Where(phone => phone.Hide == false)
+                .Where(laptop => laptop.Hide == false)
                 .ToListAsync();
 
             if (laptops == null)
@@ -47,13 +48,13 @@ namespace Back_End_Dot_Net.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Laptop>>> GetLaptops()
         {
-            if (_dbContext.Phones == null)
+            if (_dbContext.Laptops == null)
             {
                 return NotFound();
             }
 
             var laptops = await _dbContext.Laptops
-                .Where(phone => phone.Hide == false)
+                .Where(laptop => laptop.Hide == false)
                 .Select(laptop => new
                 {
                     laptop.Name,
@@ -85,7 +86,7 @@ namespace Back_End_Dot_Net.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Laptop>>> GetLaptopByName(string name)
         {
-            if (_dbContext.Phones == null)
+            if (_dbContext.Laptops == null)
             {
                 return NotFound();
             }
@@ -110,13 +111,7 @@ namespace Back_End_Dot_Net.Controllers
                 return NotFound();
             }
 
-            var response = new
-            {
-                Total = laptop.Count(),
-                Data = laptop
-            };
-
-            return Ok(response);
+            return Ok(laptop);
         }
 
         [Route("top-5-accessed-laptops")]
@@ -137,20 +132,14 @@ namespace Back_End_Dot_Net.Controllers
                 .Take(5)
                 .ToList();
 
-            var response = new
-            {
-                Total = top5Laptops.Count(),
-                Data = top5Laptops
-            };
-
-            return Ok(response);
+            return Ok(top5Laptops);
         }
 
         [Route("create-laptop")]
         [HttpPost]
         public async Task<ActionResult<Laptop>> CreateLaptop(Laptop laptop)
         {
-            // Validate duplicate phone
+            // Validate duplicate laptop
             var existingLaptop = await _dbContext.Laptops
                 .FirstOrDefaultAsync(p => p.Name.ToLower() == laptop.Name.ToLower());
             if (existingLaptop != null)
@@ -223,12 +212,122 @@ namespace Back_End_Dot_Net.Controllers
 
             laptop.Id = Guid.NewGuid();
 
-            return laptop;
+            // If user input CPU ID
+            if (laptop.CpuId != null)
+            {
+                var existingCpu = await _dbContext.Chipsets.FindAsync(laptop.CpuId);
+                if (existingCpu == null)
+                {
+                    var errorMessage = new ErrorResponse(ErrorTitle.ItemsNotFound, ErrorStatus.BadRequest, ErrorType.InvalidInput);
+                    errorMessage.AddError($"The value '{laptop.CpuId}' is not found on Chipsets Entity.");
 
-            // _dbContext.Laptops.Add(laptop);
-            // await _dbContext.SaveChangesAsync();
+                    return BadRequest(errorMessage);
+                }
 
-            // return CreatedAtAction(nameof(GetLaptops), new { name = laptop.Name }, laptop);
+                laptop.CPU = existingCpu;
+            }
+
+            _dbContext.Laptops.Add(laptop);
+            await _dbContext.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetLaptops), new { name = laptop.Name }, laptop);
+        }
+
+        [Route("bulk-create-laptops")]
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<Laptop>>> BulkCreateLaptops(IEnumerable<Laptop> laptops)
+        {
+            foreach (var laptop in laptops)
+            {
+                await CreateLaptop(laptop);
+            }
+
+            return CreatedAtAction(nameof(GetLaptops), laptops);
+        }
+
+        [Route("update-laptops/{id}")]
+        [HttpPatch]
+        public async Task<ActionResult<Laptop>> UpdateLaptop(Guid id, [FromBody] JsonPatchDocument<Laptop> laptopPatch)
+        {
+            var existingLaptop = await _dbContext.Laptops.FindAsync(id);
+            if (existingLaptop == null)
+            {
+                return NotFound();
+            }
+
+            // Apply the patch to the existing laptop object
+            laptopPatch.ApplyTo(existingLaptop);
+
+            // Validate against schemas that define along with model
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Validate Performance Features
+            if (existingLaptop.PerformanceFeatures != null)
+            {
+                foreach (var feature in existingLaptop.PerformanceFeatures)
+                {
+                    if (!Enum.IsDefined(typeof(LaptopPerformanceFeatures), feature))
+                    {
+                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
+                        errorMessage.AddError($"The value '{feature}' is not a valid LaptopPerformanceFeatures value.");
+
+                        return BadRequest(errorMessage);
+                    }
+                }
+            }
+
+            // Validate Screen Features
+            if (existingLaptop.ScreenFeatures != null)
+            {
+                foreach (var feature in existingLaptop.ScreenFeatures)
+                {
+                    if (!Enum.IsDefined(typeof(LaptopScreenFeatures), feature))
+                    {
+                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
+                        errorMessage.AddError($"The value '{feature}' is not a valid LaptopScreenFeatures value.");
+
+                        return BadRequest(errorMessage);
+                    }
+                }
+            }
+
+            // Validate Design Features
+            if (existingLaptop.DesignFeatures != null)
+            {
+                foreach (var feature in existingLaptop.DesignFeatures)
+                {
+                    if (!Enum.IsDefined(typeof(LaptopDesignFeatures), feature))
+                    {
+                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
+                        errorMessage.AddError($"The value '{feature}' is not a valid LaptopDesignFeatures value.");
+
+                        return BadRequest(errorMessage);
+                    }
+                }
+            }
+
+            // Validate Features
+            if (existingLaptop.Features != null)
+            {
+                foreach (var feature in existingLaptop.Features)
+                {
+                    if (!Enum.IsDefined(typeof(LaptopFeatures), feature))
+                    {
+                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
+                        errorMessage.AddError($"The value '{feature}' is not a valid LaptopFeatures value.");
+
+                        return BadRequest(errorMessage);
+                    }
+                }
+            }
+
+            // Save the changes to the database
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(existingLaptop);
         }
 
         [Route("delete-laptop/{id}")]
@@ -245,7 +344,13 @@ namespace Back_End_Dot_Net.Controllers
             _dbContext.Laptops.Remove(laptopToDelete);
             await _dbContext.SaveChangesAsync();
 
-            return NoContent();
+            var response = new
+            {
+                Message = $"Laptop with UUID {id} had been deleted.",
+                LaptopName = laptopToDelete.Name
+            };
+
+            return Ok(response);
         }
     }
 }

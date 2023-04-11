@@ -116,13 +116,7 @@ namespace Back_End_Dot_Net.Controllers
                 return NotFound();
             }
 
-            var response = new
-            {
-                Total = phone.Count(),
-                Data = phone
-            };
-
-            return Ok(response);
+            return Ok(phone);
         }
 
         [Route("top-5-accessed-phones")]
@@ -143,13 +137,7 @@ namespace Back_End_Dot_Net.Controllers
                 .Take(5)
                 .ToList();
 
-            var response = new
-            {
-                Total = top5Phones.Count(),
-                Data = top5Phones
-            };
-
-            return Ok(response);
+            return Ok(top5Phones);
         }
 
         [Route("create-phone")]
@@ -238,11 +226,11 @@ namespace Back_End_Dot_Net.Controllers
 
             _dbContext.Phones.Add(phone);
             await _dbContext.SaveChangesAsync();
-            
+
             return CreatedAtAction(nameof(GetPhones), new { id = phone.Id }, phone);
         }
 
-        [Route("create-phones")]
+        [Route("bulk-create-phones")]
         [HttpPost]
         public async Task<ActionResult<IEnumerable<Phone>>> CreatePhones(IEnumerable<Phone> phones)
         {
@@ -353,7 +341,13 @@ namespace Back_End_Dot_Net.Controllers
             _dbContext.Phones.Remove(phoneToDelete);
             await _dbContext.SaveChangesAsync();
 
-            return NoContent();
+            var response = new
+            {
+                Message = $"Laptop with UUID {id} had been deleted.",
+                LaptopName = phoneToDelete.Name
+            };
+
+            return Ok(response);
         }
     }
 }

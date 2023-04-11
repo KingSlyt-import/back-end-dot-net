@@ -5,7 +5,6 @@ using Back_End_Dot_Net.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
 using Serilog;
 
 namespace Back_End_Dot_Net.Controllers
@@ -152,13 +151,7 @@ namespace Back_End_Dot_Net.Controllers
                 .Take(5)
                 .ToList();
 
-            var response = new
-            {
-                Total = top5Chipsets.Count(),
-                Data = top5Chipsets
-            };
-
-            return Ok(response);
+            return Ok(top5Chipsets);
         }
 
         [Route("create-chipset")]
@@ -205,18 +198,20 @@ namespace Back_End_Dot_Net.Controllers
                 }
             }
 
+            return chipset;
+
             // Generate UUID for new item
-            chipset.Id = Guid.NewGuid();
+            // chipset.Id = Guid.NewGuid();
 
-            _dbContext.Chipsets.Add(chipset);
-            await _dbContext.SaveChangesAsync();
+            // _dbContext.Chipsets.Add(chipset);
+            // await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetChipsets), new { name = chipset.Name }, chipset);
+            // return CreatedAtAction(nameof(GetChipsets), new { name = chipset.Name }, chipset);
         }
 
-        [Route("create-chipsets")]
+        [Route("bulk-create-chipsets")]
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<Chipset>>> CreateChipsets(IEnumerable<Chipset> chipsets)
+        public async Task<ActionResult<IEnumerable<Chipset>>> BulkCreateChipsets(IEnumerable<Chipset> chipsets)
         {
             foreach (var chipset in chipsets)
             {

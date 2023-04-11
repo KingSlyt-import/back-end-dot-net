@@ -24,10 +24,9 @@ namespace Back_End_Dot_Net.Models
 
         // Performance properties
         [DisplayName("CPU ID")]
-        public Guid CpuId { get; set; }
+        public Guid? CpuId { get; set; }
 
         // Navigation property for CPU
-        [JsonIgnore]
         public Chipset? CPU { get; set; }
 
         [DisplayName("RAM")]

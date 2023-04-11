@@ -15,7 +15,11 @@ builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlSer
 ));
 
 // Add JSON serialization for using HTTP PATCH
-builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options => 
+    {
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

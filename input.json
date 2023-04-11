@@ -1,40 +1,25 @@
 {
-  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "name": "string",
-  "price": 0,
-  "image": "string",
-  "description": "string",
-  "manufacture": "string",
-  "cpuName": "string",
-  "cpuType": "string",
-  "cpuSpeedBase": 0,
-  "cpuSpeedBoost": 0,
-  "ram": 0,
-  "ramSpeed": 0,
-  "inStorage": 0,
-  "phonePerformanceFeatures": [
-    "string"
+  "id": "5c541df7-8be0-4d0b-b4e4-b9ffca0a31ab",
+  "name": "Apple M1",
+  "image": "https://images.versus.io/objects/apple-m1.front.variety.1614956045880.jpg",
+  "description": "The Apple M1 is a system on a chip (SoC) designed by Apple Inc. It was announced on November 10, 2020 as part of the MacBook Air (M1, 2020), Mac Mini (M1, 2020), and MacBook Pro (13-inch, M1, 2020). It features an 8-core CPU, 8-core GPU, and a 16-core Neural Engine.",
+  "manufacture": "Apple",
+  "type": "All",
+  "cpuSocket": null,
+  "cpuTemp": 45,
+  "tdp": 15,
+  "cpuSpeedBase": 3.2,
+  "cpuSpeedBoost": 3.8,
+  "cpuThread": 16,
+  "semiconductorSize": 5,
+  "pci": 0,
+  "memoryChannels": 2,
+  "performanceFeatures": [
+  "Neural Engine",
+  "Unified Memory Architecture",
+  "Hardware Security",
+  "8-core GPU"
   ],
-  "screenSize": 0,
-  "resolution": "string",
-  "screenHz": 0,
-  "nits": 0,
-  "ppi": 0,
-  "phoneScreenFeatures": [
-    "string"
-  ],
-  "weight": 0,
-  "height": 0,
-  "width": 0,
-  "phoneDesignFeatures": [
-    "string"
-  ],
-  "mainCameraMP": "string",
-  "frontCameraMP": 0,
-  "batteryPower": 0,
-  "charging": 0,
-  "magSafe": false,
-  "phoneFeatures": [
-    "string"
-  ]
+  "ramVersion": "LPDDR4X",
+  "ramSpeed": 4266
 }
