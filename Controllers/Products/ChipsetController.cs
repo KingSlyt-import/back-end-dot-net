@@ -14,10 +14,12 @@ namespace Back_End_Dot_Net.Controllers
     public class ChipsetController : ControllerBase
     {
         private readonly ApplicationDBContext _dbContext;
+        private readonly FeaturesValidator _validator;
 
         public ChipsetController(ApplicationDBContext dbContext)
         {
             _dbContext = dbContext;
+            _validator = new FeaturesValidator(dbContext);
         }
 
         [Route("get-all-chipset")]
@@ -167,6 +169,7 @@ namespace Back_End_Dot_Net.Controllers
             // Validate duplicate chipset
             var existingChipset = await _dbContext.Chipsets
                 .FirstOrDefaultAsync(c => c.Name.ToLower() == chipset.Name.ToLower());
+
             if (existingChipset != null)
             {
                 var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
@@ -175,38 +178,36 @@ namespace Back_End_Dot_Net.Controllers
                 return BadRequest(errorMessage);
             }
 
-            // Validate Performance Features
+            // Performance features validation
             if (chipset.PerformanceFeatures != null)
             {
                 foreach (var feature in chipset.PerformanceFeatures)
                 {
-                    // Get the description of the enum value
-                    var descriptionAttribute = typeof(ChipsetPerformanceFeatures)
-                        .GetMember(feature.ToString())
-                        .FirstOrDefault()?
-                        .GetCustomAttribute<DescriptionAttribute>();
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features { 
+                        Name = feature, 
+                        Type = FeaturesType.Performance.GetDisplayName(), 
+                        Category = FeaturesCategory.Chipset.GetDisplayName() 
+                    };
 
-                    Log.Information("The value of descriptionAttribute is {Value}", descriptionAttribute);
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
 
-                    if (descriptionAttribute == null)
+                    if (!isValid)
                     {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid ChipsetPerformanceFeatures value.");
-
-                        return BadRequest(errorMessage);
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
                     }
                 }
             }
 
-            return chipset;
-
             // Generate UUID for new item
-            // chipset.Id = Guid.NewGuid();
+            chipset.Id = Guid.NewGuid();
+
+            return chipset;
 
             // _dbContext.Chipsets.Add(chipset);
             // await _dbContext.SaveChangesAsync();
 
-            // return CreatedAtAction(nameof(GetChipsets), new { name = chipset.Name }, chipset);
+            return CreatedAtAction(nameof(GetChipsets), new { name = chipset.Name }, chipset);
         }
 
         [Route("bulk-create-chipsets")]

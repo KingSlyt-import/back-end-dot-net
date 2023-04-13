@@ -15,6 +15,9 @@ namespace Back_End_Dot_Net.Data
         public DbSet<Phone> Phones { get; set; }
         public DbSet<Laptop> Laptops { get; set; }
         public DbSet<Chipset> Chipsets { get; set; }
+        public DbSet<Features> Features { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,52 +46,52 @@ namespace Back_End_Dot_Net.Data
             modelBuilder.Entity<Laptop>()
             .Property(e => e.PerformanceFeatures)
             .HasConversion(
-                v => v == null? null : string.Join(',', v),
-                v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                v => v == null ? null : string.Join(',', v),
+                v => v == null ? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
             .Metadata.SetValueComparer(valueComparer);
             modelBuilder.Entity<Laptop>()
             .Property(e => e.ScreenFeatures)
             .HasConversion(
-                v => v == null? null : string.Join(',', v),
-                v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                v => v == null ? null : string.Join(',', v),
+                v => v == null ? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
             .Metadata.SetValueComparer(valueComparer);
             modelBuilder.Entity<Laptop>()
             .Property(e => e.DesignFeatures)
             .HasConversion(
-                v => v == null? null : string.Join(',', v),
-                v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                v => v == null ? null : string.Join(',', v),
+                v => v == null ? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
             .Metadata.SetValueComparer(valueComparer);
             modelBuilder.Entity<Laptop>()
             .Property(e => e.Features)
             .HasConversion(
-                v => v == null? null : string.Join(',', v),
-                v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                v => v == null ? null : string.Join(',', v),
+                v => v == null ? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
             .Metadata.SetValueComparer(valueComparer);
 
             // Phone Model
             modelBuilder.Entity<Phone>()
             .Property(e => e.PerformanceFeatures)
             .HasConversion(
-                v => v == null? null : string.Join(',', v),
-                v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                v => v == null ? null : string.Join(',', v),
+                v => v == null ? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
             .Metadata.SetValueComparer(valueComparer);
             modelBuilder.Entity<Phone>()
             .Property(e => e.ScreenFeatures)
             .HasConversion(
-                v => v == null? null : string.Join(',', v),
-                v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                v => v == null ? null : string.Join(',', v),
+                v => v == null ? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
             .Metadata.SetValueComparer(valueComparer);
             modelBuilder.Entity<Phone>()
             .Property(e => e.DesignFeatures)
             .HasConversion(
-                v => v == null? null : string.Join(',', v),
-                v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                v => v == null ? null : string.Join(',', v),
+                v => v == null ? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
             .Metadata.SetValueComparer(valueComparer);
             modelBuilder.Entity<Phone>()
             .Property(e => e.Features)
             .HasConversion(
-                v => v == null? null : string.Join(',', v),
-                v => v == null? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                v => v == null ? null : string.Join(',', v),
+                v => v == null ? null : v.Split(',', StringSplitOptions.RemoveEmptyEntries))
             .Metadata.SetValueComparer(valueComparer);
         }
     }

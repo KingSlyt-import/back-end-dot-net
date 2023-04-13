@@ -135,7 +135,7 @@ namespace Back_End_Dot_Net.Controllers
             return Ok(top5Laptops);
         }
 
-        [Route("create-laptop")]
+        [Route("create-laptop")] 
         [HttpPost]
         public async Task<ActionResult<Laptop>> CreateLaptop(Laptop laptop)
         {
@@ -149,66 +149,7 @@ namespace Back_End_Dot_Net.Controllers
 
                 return BadRequest(errorMessage);
             }
-
-            // Validate Performance Features
-            if (laptop.PerformanceFeatures != null)
-            {
-                foreach (var feature in laptop.PerformanceFeatures)
-                {
-                    if (!Enum.IsDefined(typeof(LaptopPerformanceFeatures), feature))
-                    {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid LaptopPerformanceFeatures value.");
-
-                        return BadRequest(errorMessage);
-                    }
-                }
-            }
-
-            // Validate Screen Features
-            if (laptop.ScreenFeatures != null)
-            {
-                foreach (var feature in laptop.ScreenFeatures)
-                {
-                    if (!Enum.IsDefined(typeof(LaptopScreenFeatures), feature))
-                    {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid LaptopScreenFeatures value.");
-
-                        return BadRequest(errorMessage);
-                    }
-                }
-            }
-
-            // Validate Design Features
-            if (laptop.DesignFeatures != null)
-            {
-                foreach (var feature in laptop.DesignFeatures)
-                {
-                    if (!Enum.IsDefined(typeof(LaptopDesignFeatures), feature))
-                    {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid LaptopDesignFeatures value.");
-
-                        return BadRequest(errorMessage);
-                    }
-                }
-            }
-
-            // Validate Features
-            if (laptop.Features != null)
-            {
-                foreach (var feature in laptop.Features)
-                {
-                    if (!Enum.IsDefined(typeof(LaptopFeatures), feature))
-                    {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid LaptopFeatures value.");
-
-                        return BadRequest(errorMessage);
-                    }
-                }
-            }
+    
 
             laptop.Id = Guid.NewGuid();
 

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Back_End_Dot_Net.Data;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
@@ -16,7 +17,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlSer
 
 // Add JSON serialization for using HTTP PATCH
 builder.Services.AddControllers()
-    .AddNewtonsoftJson(options => 
+    .AddNewtonsoftJson(options =>
     {
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
         options.SerializerSettings.Converters.Add(new StringEnumConverter());
@@ -25,6 +26,10 @@ builder.Services.AddControllers()
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Make enum data type represent as strings in SwaggerUI
+builder.Services.AddControllers().AddJsonOptions(options =>
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 // Add logging info using Serilog
 var logger = new LoggerConfiguration()
