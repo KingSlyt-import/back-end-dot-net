@@ -11,10 +11,13 @@ namespace Back_End_Dot_Net.Controllers
     public class PhoneController : ControllerBase
     {
         private readonly ApplicationDBContext _dbContext;
+        private readonly FeaturesValidator _validator;
 
         public PhoneController(ApplicationDBContext dbContext)
         {
             _dbContext = dbContext;
+            _validator = new FeaturesValidator(dbContext);
+
         }
 
         [Route("get-all-phone")]
@@ -161,65 +164,94 @@ namespace Back_End_Dot_Net.Controllers
                 return BadRequest(errorMessage);
             }
 
-            // Validate Performance Features
+            // Performance features validation
             if (phone.PerformanceFeatures != null)
             {
                 foreach (var feature in phone.PerformanceFeatures)
                 {
-                    if (!Enum.IsDefined(typeof(PhonePerformanceFeatures), feature))
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
                     {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid PhonePerformanceFeatures value.");
+                        Name = feature,
+                        Type = FeaturesType.Performance.GetDisplayName(),
+                        Category = FeaturesCategory.Phone.GetDisplayName()
+                    };
 
-                        return BadRequest(errorMessage);
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
                     }
                 }
             }
 
-            // Validate Screen Features
+            // Screen features validation
             if (phone.ScreenFeatures != null)
             {
                 foreach (var feature in phone.ScreenFeatures)
                 {
-                    if (!Enum.IsDefined(typeof(PhoneScreenFeatures), feature))
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
                     {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid PhoneScreenFeatures value.");
+                        Name = feature,
+                        Type = FeaturesType.Screen.GetDisplayName(),
+                        Category = FeaturesCategory.Phone.GetDisplayName()
+                    };
 
-                        return BadRequest(errorMessage);
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
                     }
                 }
             }
 
-            // Validate Design Features
+            // Design features validation
             if (phone.DesignFeatures != null)
             {
                 foreach (var feature in phone.DesignFeatures)
                 {
-                    if (!Enum.IsDefined(typeof(PhoneDesignFeatures), feature))
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
                     {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid PhoneDesignFeatures value.");
+                        Name = feature,
+                        Type = FeaturesType.Design.GetDisplayName(),
+                        Category = FeaturesCategory.Phone.GetDisplayName()
+                    };
 
-                        return BadRequest(errorMessage);
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
                     }
                 }
             }
 
-            // Validate Features
+            // Features validation
             if (phone.Features != null)
             {
                 foreach (var feature in phone.Features)
                 {
-                    if (!Enum.IsDefined(typeof(PhoneFeatures), feature))
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
                     {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid PhoneFeatures value.");
+                        Name = feature,
+                        Type = FeaturesType.Default.GetDisplayName(),
+                        Category = FeaturesCategory.Phone.GetDisplayName()
+                    };
 
-                        return BadRequest(errorMessage);
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
                     }
                 }
             }
+
 
             // Generate UUID for new item
             phone.Id = Guid.NewGuid();
@@ -261,62 +293,90 @@ namespace Back_End_Dot_Net.Controllers
                 return BadRequest(ModelState);
             }
 
-            // Validate Performance Features
+            // Performance features validation
             if (existingPhone.PerformanceFeatures != null)
             {
                 foreach (var feature in existingPhone.PerformanceFeatures)
                 {
-                    if (!Enum.IsDefined(typeof(PhonePerformanceFeatures), feature))
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
                     {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid PhonePerformanceFeatures value.");
+                        Name = feature,
+                        Type = FeaturesType.Performance.GetDisplayName(),
+                        Category = FeaturesCategory.Phone.GetDisplayName()
+                    };
 
-                        return BadRequest(errorMessage);
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
                     }
                 }
             }
 
-            // Validate Screen Features
+            // Screen features validation
             if (existingPhone.ScreenFeatures != null)
             {
                 foreach (var feature in existingPhone.ScreenFeatures)
                 {
-                    if (!Enum.IsDefined(typeof(PhoneScreenFeatures), feature))
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
                     {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid PhoneScreenFeatures value.");
+                        Name = feature,
+                        Type = FeaturesType.Screen.GetDisplayName(),
+                        Category = FeaturesCategory.Phone.GetDisplayName()
+                    };
 
-                        return BadRequest(errorMessage);
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
                     }
                 }
             }
 
-            // Validate Design Features
+            // Design features validation
             if (existingPhone.DesignFeatures != null)
             {
                 foreach (var feature in existingPhone.DesignFeatures)
                 {
-                    if (!Enum.IsDefined(typeof(PhoneDesignFeatures), feature))
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
                     {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid PhoneDesignFeatures value.");
+                        Name = feature,
+                        Type = FeaturesType.Design.GetDisplayName(),
+                        Category = FeaturesCategory.Phone.GetDisplayName()
+                    };
 
-                        return BadRequest(errorMessage);
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
                     }
                 }
             }
 
-            // Validate Features
+            // Features validation
             if (existingPhone.Features != null)
             {
                 foreach (var feature in existingPhone.Features)
                 {
-                    if (!Enum.IsDefined(typeof(PhoneFeatures), feature))
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
                     {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid PhoneFeatures value.");
+                        Name = feature,
+                        Type = FeaturesType.Default.GetDisplayName(),
+                        Category = FeaturesCategory.Phone.GetDisplayName()
+                    };
 
-                        return BadRequest(errorMessage);
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
                     }
                 }
             }

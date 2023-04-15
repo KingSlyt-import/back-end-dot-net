@@ -1,11 +1,8 @@
-﻿using System.ComponentModel;
-using System.Reflection;
-using Back_End_Dot_Net.Data;
+﻿using Back_End_Dot_Net.Data;
 using Back_End_Dot_Net.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 
 namespace Back_End_Dot_Net.Controllers
 {
@@ -202,10 +199,8 @@ namespace Back_End_Dot_Net.Controllers
             // Generate UUID for new item
             chipset.Id = Guid.NewGuid();
 
-            return chipset;
-
-            // _dbContext.Chipsets.Add(chipset);
-            // await _dbContext.SaveChangesAsync();
+            _dbContext.Chipsets.Add(chipset);
+            await _dbContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetChipsets), new { name = chipset.Name }, chipset);
         }
@@ -241,17 +236,24 @@ namespace Back_End_Dot_Net.Controllers
                 return BadRequest(ModelState);
             }
 
-            // Validate Performance Features
+            // Performance features validation
             if (existingChipset.PerformanceFeatures != null)
             {
                 foreach (var feature in existingChipset.PerformanceFeatures)
                 {
-                    if (!Enum.IsDefined(typeof(ChipsetPerformanceFeatures), feature))
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
                     {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid ChipsetPerformanceFeatures value.");
+                        Name = feature,
+                        Type = FeaturesType.Performance.GetDisplayName(),
+                        Category = FeaturesCategory.Chipset.GetDisplayName()
+                    };
 
-                        return BadRequest(errorMessage);
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
                     }
                 }
             }

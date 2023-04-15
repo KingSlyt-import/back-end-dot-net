@@ -11,10 +11,12 @@ namespace Back_End_Dot_Net.Controllers
     public class LaptopController : ControllerBase
     {
         private readonly ApplicationDBContext _dbContext;
+        private readonly FeaturesValidator _validator;
 
         public LaptopController(ApplicationDBContext dbContext)
         {
             _dbContext = dbContext;
+            _validator = new FeaturesValidator(dbContext);
         }
 
         [Route("get-all-laptops")]
@@ -135,7 +137,7 @@ namespace Back_End_Dot_Net.Controllers
             return Ok(top5Laptops);
         }
 
-        [Route("create-laptop")] 
+        [Route("create-laptop")]
         [HttpPost]
         public async Task<ActionResult<Laptop>> CreateLaptop(Laptop laptop)
         {
@@ -149,8 +151,96 @@ namespace Back_End_Dot_Net.Controllers
 
                 return BadRequest(errorMessage);
             }
-    
 
+            // Performance features validation
+            if (laptop.PerformanceFeatures != null)
+            {
+                foreach (var feature in laptop.PerformanceFeatures)
+                {
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
+                    {
+                        Name = feature,
+                        Type = FeaturesType.Performance.GetDisplayName(),
+                        Category = FeaturesCategory.Laptop.GetDisplayName()
+                    };
+
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
+                    }
+                }
+            }
+
+            // Screen features validation
+            if (laptop.ScreenFeatures != null)
+            {
+                foreach (var feature in laptop.ScreenFeatures)
+                {
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
+                    {
+                        Name = feature,
+                        Type = FeaturesType.Screen.GetDisplayName(),
+                        Category = FeaturesCategory.Laptop.GetDisplayName()
+                    };
+
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
+                    }
+                }
+            }
+
+            // Design features validation
+            if (laptop.DesignFeatures != null)
+            {
+                foreach (var feature in laptop.DesignFeatures)
+                {
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
+                    {
+                        Name = feature,
+                        Type = FeaturesType.Design.GetDisplayName(),
+                        Category = FeaturesCategory.Laptop.GetDisplayName()
+                    };
+
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
+                    }
+                }
+            }
+
+            // Features validation
+            if (laptop.Features != null)
+            {
+                foreach (var feature in laptop.Features)
+                {
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
+                    {
+                        Name = feature,
+                        Type = FeaturesType.Default.GetDisplayName(),
+                        Category = FeaturesCategory.Laptop.GetDisplayName()
+                    };
+
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
+                    }
+                }
+            }
+
+            // Generate UUID for new item
             laptop.Id = Guid.NewGuid();
 
             // If user input CPU ID
@@ -205,67 +295,94 @@ namespace Back_End_Dot_Net.Controllers
                 return BadRequest(ModelState);
             }
 
-            // Validate Performance Features
+            // Performance features validation
             if (existingLaptop.PerformanceFeatures != null)
             {
                 foreach (var feature in existingLaptop.PerformanceFeatures)
                 {
-                    if (!Enum.IsDefined(typeof(LaptopPerformanceFeatures), feature))
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
                     {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid LaptopPerformanceFeatures value.");
+                        Name = feature,
+                        Type = FeaturesType.Performance.GetDisplayName(),
+                        Category = FeaturesCategory.Laptop.GetDisplayName()
+                    };
 
-                        return BadRequest(errorMessage);
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
                     }
                 }
             }
 
-            // Validate Screen Features
+            // Screen features validation
             if (existingLaptop.ScreenFeatures != null)
             {
                 foreach (var feature in existingLaptop.ScreenFeatures)
                 {
-                    if (!Enum.IsDefined(typeof(LaptopScreenFeatures), feature))
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
                     {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid LaptopScreenFeatures value.");
+                        Name = feature,
+                        Type = FeaturesType.Screen.GetDisplayName(),
+                        Category = FeaturesCategory.Laptop.GetDisplayName()
+                    };
 
-                        return BadRequest(errorMessage);
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
                     }
                 }
             }
 
-            // Validate Design Features
+            // Design features validation
             if (existingLaptop.DesignFeatures != null)
             {
                 foreach (var feature in existingLaptop.DesignFeatures)
                 {
-                    if (!Enum.IsDefined(typeof(LaptopDesignFeatures), feature))
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
                     {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid LaptopDesignFeatures value.");
+                        Name = feature,
+                        Type = FeaturesType.Design.GetDisplayName(),
+                        Category = FeaturesCategory.Laptop.GetDisplayName()
+                    };
 
-                        return BadRequest(errorMessage);
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
                     }
                 }
             }
 
-            // Validate Features
+            // Features validation
             if (existingLaptop.Features != null)
             {
                 foreach (var feature in existingLaptop.Features)
                 {
-                    if (!Enum.IsDefined(typeof(LaptopFeatures), feature))
+                    // Validate each feature using FeaturesValidator
+                    var featureModel = new Features
                     {
-                        var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
-                        errorMessage.AddError($"The value '{feature}' is not a valid LaptopFeatures value.");
+                        Name = feature,
+                        Type = FeaturesType.Default.GetDisplayName(),
+                        Category = FeaturesCategory.Laptop.GetDisplayName()
+                    };
 
-                        return BadRequest(errorMessage);
+                    var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
+
+                    if (!isValid)
+                    {
+                        return BadRequest(errors); // Return any validation errors for the invalid feature(s)
                     }
                 }
             }
 
-            // Save the changes to the database
             await _dbContext.SaveChangesAsync();
 
             return Ok(existingLaptop);
