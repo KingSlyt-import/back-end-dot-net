@@ -1,8 +1,12 @@
-﻿using Back_End_Dot_Net.Data;
+﻿// Namespace imports 
+using Back_End_Dot_Net.Data;
 using Back_End_Dot_Net.Models;
+using Back_End_Dot_Net.DTOs;
+// Library imports
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace Back_End_Dot_Net.Controllers
 {
@@ -12,12 +16,13 @@ namespace Back_End_Dot_Net.Controllers
     {
         private readonly ApplicationDBContext _dbContext;
         private readonly FeaturesValidator _validator;
+        private readonly IMapper _mapper;
 
-        public PhoneController(ApplicationDBContext dbContext)
+        public PhoneController(ApplicationDBContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
             _validator = new FeaturesValidator(dbContext);
-
         }
 
         [Route("get-all-phone")]
@@ -145,8 +150,10 @@ namespace Back_End_Dot_Net.Controllers
 
         [Route("create-phone")]
         [HttpPost]
-        public async Task<ActionResult<Phone>> CreatePhone(Phone phone)
+        public async Task<ActionResult<Phone>> CreatePhone(PhoneDTO phoneDto)
         {
+            var phone = _mapper.Map<Phone>(phoneDto);
+
             // Validate against schemas that define along with model
             if (!ModelState.IsValid)
             {
@@ -264,9 +271,9 @@ namespace Back_End_Dot_Net.Controllers
 
         [Route("bulk-create-phones")]
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<Phone>>> CreatePhones(IEnumerable<Phone> phones)
+        public async Task<ActionResult<IEnumerable<Phone>>> CreatePhones(BulkCreateDTO<PhoneDTO> phones)
         {
-            foreach (var phone in phones)
+            foreach (var phone in phones.Items)
             {
                 await CreatePhone(phone);
             }

@@ -16,8 +16,7 @@ namespace Back_End_Dot_Net.Data
         public DbSet<Laptop> Laptops { get; set; }
         public DbSet<Chipset> Chipsets { get; set; }
         public DbSet<Features> Features { get; set; }
-
-
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Back_End_Dot_Net.Data;
+using Back_End_Dot_Net.Utils.Configs;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
 using Serilog;
@@ -38,6 +39,11 @@ var logger = new LoggerConfiguration()
   .CreateLogger();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
+
+// Add auto-mapping into project for turning DTO -> Model
+builder.Services.AddAutoMapper(
+    typeof(ProductMapperConfig)
+);
 
 if (builder.Environment.IsDevelopment())
 {

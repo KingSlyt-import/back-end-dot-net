@@ -1,8 +1,12 @@
-﻿using Back_End_Dot_Net.Data;
+﻿// Namespace imports 
+using Back_End_Dot_Net.Data;
 using Back_End_Dot_Net.Models;
+// Library imports
+using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Back_End_Dot_Net.DTOs;
 
 namespace Back_End_Dot_Net.Controllers
 {
@@ -12,10 +16,13 @@ namespace Back_End_Dot_Net.Controllers
     {
         private readonly ApplicationDBContext _dbContext;
         private readonly FeaturesValidator _validator;
+        private readonly IMapper _mapper;
 
-        public LaptopController(ApplicationDBContext dbContext)
+
+        public LaptopController(ApplicationDBContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
             _validator = new FeaturesValidator(dbContext);
         }
 
@@ -139,8 +146,16 @@ namespace Back_End_Dot_Net.Controllers
 
         [Route("create-laptop")]
         [HttpPost]
-        public async Task<ActionResult<Laptop>> CreateLaptop(Laptop laptop)
+        public async Task<ActionResult<Laptop>> CreateLaptop(LaptopDTO laptopDto)
         {
+            var laptop = _mapper.Map<Laptop>(laptopDto);
+
+            // Validate against schemas that define along with model
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             // Validate duplicate laptop
             var existingLaptop = await _dbContext.Laptops
                 .FirstOrDefaultAsync(p => p.Name.ToLower() == laptop.Name.ToLower());
@@ -266,9 +281,9 @@ namespace Back_End_Dot_Net.Controllers
 
         [Route("bulk-create-laptops")]
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<Laptop>>> BulkCreateLaptops(IEnumerable<Laptop> laptops)
+        public async Task<ActionResult<IEnumerable<Laptop>>> BulkCreateLaptops(BulkCreateDTO<LaptopDTO> laptops)
         {
-            foreach (var laptop in laptops)
+            foreach (var laptop in laptops.Items)
             {
                 await CreateLaptop(laptop);
             }

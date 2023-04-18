@@ -1,8 +1,12 @@
-﻿using Back_End_Dot_Net.Data;
+﻿// Namespace imports 
+using Back_End_Dot_Net.Data;
 using Back_End_Dot_Net.Models;
+using Back_End_Dot_Net.DTOs;
+// Library imports
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace Back_End_Dot_Net.Controllers
 {
@@ -12,16 +16,19 @@ namespace Back_End_Dot_Net.Controllers
     {
         private readonly ApplicationDBContext _dbContext;
         private readonly FeaturesValidator _validator;
+        private readonly IMapper _mapper;
 
-        public ChipsetController(ApplicationDBContext dbContext)
+
+        public ChipsetController(ApplicationDBContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;           
             _validator = new FeaturesValidator(dbContext);
         }
 
         [Route("get-all-chipset")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Laptop>>> GetAllChipset()
+        public async Task<ActionResult<IEnumerable<Chipset>>> GetAllChipset()
         {
             if (_dbContext.Chipsets == null)
             {
@@ -155,8 +162,10 @@ namespace Back_End_Dot_Net.Controllers
 
         [Route("create-chipset")]
         [HttpPost]
-        public async Task<ActionResult<Chipset>> CreateChipset(Chipset chipset)
+        public async Task<ActionResult<Chipset>> CreateChipset(ChipsetDTO chipsetDto)
         {
+            var chipset = _mapper.Map<Chipset>(chipsetDto);
+
             // Validate against schemas that define along with model
             if (!ModelState.IsValid)
             {
@@ -181,10 +190,11 @@ namespace Back_End_Dot_Net.Controllers
                 foreach (var feature in chipset.PerformanceFeatures)
                 {
                     // Validate each feature using FeaturesValidator
-                    var featureModel = new Features { 
-                        Name = feature, 
-                        Type = FeaturesType.Performance.GetDisplayName(), 
-                        Category = FeaturesCategory.Chipset.GetDisplayName() 
+                    var featureModel = new Features
+                    {
+                        Name = feature,
+                        Type = FeaturesType.Performance.GetDisplayName(),
+                        Category = FeaturesCategory.Chipset.GetDisplayName()
                     };
 
                     var (isValid, errors) = await _validator.ValidateFeatureAsync(featureModel);
@@ -207,9 +217,9 @@ namespace Back_End_Dot_Net.Controllers
 
         [Route("bulk-create-chipsets")]
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<Chipset>>> BulkCreateChipsets(IEnumerable<Chipset> chipsets)
+        public async Task<ActionResult<IEnumerable<Chipset>>> BulkCreateChipsets(BulkCreateDTO<ChipsetDTO> chipsets)
         {
-            foreach (var chipset in chipsets)
+            foreach (var chipset in chipsets.Items)
             {
                 await CreateChipset(chipset);
             }
@@ -278,7 +288,13 @@ namespace Back_End_Dot_Net.Controllers
             _dbContext.Chipsets.Remove(chipsetToDelete);
             await _dbContext.SaveChangesAsync();
 
-            return NoContent();
+            var response = new
+            {
+                Message = $"Chipset with UUID {id} had been deleted.",
+                ChipsetName = chipsetToDelete.Name
+            };
+
+            return Ok(response);
         }
     }
 }

@@ -1,15 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using System.Text.Json.Serialization;
-// using Back_End_Dot_Net.Utils;
+using System.ComponentModel.DataAnnotations;
 
-namespace Back_End_Dot_Net.Models
+namespace Back_End_Dot_Net.DTOs
 {
-    public class Chipset
+    public class ChipsetDTO
     {
-        // Overview
-        public Guid Id { get; set; }
-
         [Required]
         public string? Name { get; set; }
 
@@ -33,7 +28,6 @@ namespace Back_End_Dot_Net.Models
         [DisplayName("Thermal Design Power")]
         public int TDP { get; set; }
 
-        // Performance features
         [DisplayName("Base CPU Speed")]
         public double CpuSpeedBase { get; set; }
 
@@ -55,28 +49,11 @@ namespace Back_End_Dot_Net.Models
         [DisplayName("Performance Features")]
         public IEnumerable<string>? PerformanceFeatures { get; set; }
 
-        // RAM Support
         [DisplayName("DDR Version")]
         [EnumDataType(typeof(ChipsetRAMVersion))]
         public ChipsetRAMVersion RAMVersion { get; set; }
 
         [DisplayName("RAM Speed")]
         public int RAMSpeed { get; set; }
-
-        // Navigation property for laptops
-        public ICollection<Laptop>? Laptops { get; set; }
-
-        // Others
-        [DefaultValue(false)]
-        [JsonIgnore]
-        public bool Hide { get; set; } = false;
-
-        [DisplayName("Access Time")]
-        [JsonIgnore]
-        public int AccessTime { get; set; } = 0;
-
-        [DisplayName("Created Date")]
-        [JsonIgnore]
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
     }
 }
