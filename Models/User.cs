@@ -30,6 +30,8 @@ namespace Back_End_Dot_Net.Models
 
         public string? Avatar { get; set; }
 
+        public string Role { get; set; } = "User"; // default value set to "User"
+
         [DefaultValue(false)]
         [JsonIgnore]
         public bool Hide { get; set; } = false;

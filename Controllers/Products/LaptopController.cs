@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Back_End_Dot_Net.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Back_End_Dot_Net.Controllers
 {
@@ -144,7 +145,7 @@ namespace Back_End_Dot_Net.Controllers
             return Ok(top5Laptops);
         }
 
-        [Route("create-laptop")]
+        [Route("create-laptop"), Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Laptop>> CreateLaptop(LaptopDTO laptopDto)
         {
@@ -279,7 +280,7 @@ namespace Back_End_Dot_Net.Controllers
             return CreatedAtAction(nameof(GetLaptops), new { name = laptop.Name }, laptop);
         }
 
-        [Route("bulk-create-laptops")]
+        [Route("bulk-create-laptops"), Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<IEnumerable<Laptop>>> BulkCreateLaptops(BulkCreateDTO<LaptopDTO> laptops)
         {
@@ -291,7 +292,7 @@ namespace Back_End_Dot_Net.Controllers
             return CreatedAtAction(nameof(GetLaptops), laptops);
         }
 
-        [Route("update-laptops/{id}")]
+        [Route("update-laptops/{id}"), Authorize(Roles = "Admin")]
         [HttpPatch]
         public async Task<ActionResult<Laptop>> UpdateLaptop(Guid id, [FromBody] JsonPatchDocument<Laptop> laptopPatch)
         {
@@ -403,7 +404,7 @@ namespace Back_End_Dot_Net.Controllers
             return Ok(existingLaptop);
         }
 
-        [Route("delete-laptop/{id}")]
+        [Route("delete-laptop/{id}"), Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<IActionResult> DeleteLaptop(Guid id)
         {

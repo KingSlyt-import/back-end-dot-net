@@ -10,6 +10,7 @@ public enum ErrorTitle
 
 public enum ErrorType
 {
+    Authentication,
     Validation,
     InvalidInput
 }

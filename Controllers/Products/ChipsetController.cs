@@ -3,6 +3,7 @@ using Back_End_Dot_Net.Data;
 using Back_End_Dot_Net.Models;
 using Back_End_Dot_Net.DTOs;
 // Library imports
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,6 @@ namespace Back_End_Dot_Net.Controllers
         private readonly ApplicationDBContext _dbContext;
         private readonly FeaturesValidator _validator;
         private readonly IMapper _mapper;
-
 
         public ChipsetController(ApplicationDBContext dbContext, IMapper mapper)
         {
@@ -160,7 +160,7 @@ namespace Back_End_Dot_Net.Controllers
             return Ok(top5Chipsets);
         }
 
-        [Route("create-chipset")]
+        [Route("create-chipset"), Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Chipset>> CreateChipset(ChipsetDTO chipsetDto)
         {
@@ -215,7 +215,7 @@ namespace Back_End_Dot_Net.Controllers
             return CreatedAtAction(nameof(GetChipsets), new { name = chipset.Name }, chipset);
         }
 
-        [Route("bulk-create-chipsets")]
+        [Route("bulk-create-chipsets"), Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<IEnumerable<Chipset>>> BulkCreateChipsets(BulkCreateDTO<ChipsetDTO> chipsets)
         {
@@ -227,7 +227,7 @@ namespace Back_End_Dot_Net.Controllers
             return CreatedAtAction(nameof(GetChipsets), chipsets);
         }
 
-        [Route("update-chipset/{id}")]
+        [Route("update-chipset/{id}"), Authorize(Roles = "Admin")]
         [HttpPatch]
         public async Task<ActionResult<Chipset>> UpdateChipset(Guid id, [FromBody] JsonPatchDocument<Chipset> chipsetPatch)
         {
@@ -274,7 +274,7 @@ namespace Back_End_Dot_Net.Controllers
             return Ok(existingChipset);
         }
 
-        [Route("delete-chipset/{id}")]
+        [Route("delete-chipset/{id}"), Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<IActionResult> DeleteChipset(Guid id)
         {

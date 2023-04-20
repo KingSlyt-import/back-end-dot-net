@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Back_End_Dot_Net.Controllers
 {
@@ -148,7 +149,7 @@ namespace Back_End_Dot_Net.Controllers
             return Ok(top5Phones);
         }
 
-        [Route("create-phone")]
+        [Route("create-phone"), Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Phone>> CreatePhone(PhoneDTO phoneDto)
         {
@@ -269,7 +270,7 @@ namespace Back_End_Dot_Net.Controllers
             return CreatedAtAction(nameof(GetPhones), new { id = phone.Id }, phone);
         }
 
-        [Route("bulk-create-phones")]
+        [Route("bulk-create-phones"), Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<IEnumerable<Phone>>> CreatePhones(BulkCreateDTO<PhoneDTO> phones)
         {
@@ -281,7 +282,7 @@ namespace Back_End_Dot_Net.Controllers
             return CreatedAtAction(nameof(GetPhones), phones);
         }
 
-        [Route("update-phones/{id}")]
+        [Route("update-phones/{id}"), Authorize(Roles = "Admin")]
         [HttpPatch]
         public async Task<ActionResult<Phone>> UpdatePhone(Guid id, [FromBody] JsonPatchDocument<Phone> phonePatch)
         {
@@ -394,7 +395,7 @@ namespace Back_End_Dot_Net.Controllers
             return Ok(existingPhone);
         }
 
-        [Route("delete-phone/{id}")]
+        [Route("delete-phone/{id}"), Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<IActionResult> DeletePhone(Guid id)
         {
