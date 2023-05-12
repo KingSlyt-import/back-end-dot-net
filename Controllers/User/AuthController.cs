@@ -224,13 +224,13 @@ namespace Back_End_Dot_Net.Controllers
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role),
-                new Claim(ClaimTypes.GivenName, user.FirstName),
-                new Claim(ClaimTypes.Surname, user.LastName),
-                new Claim(ClaimTypes.Gender, user.Gender ? "Male" : "Female")
+                new Claim("userId", user.Id.ToString()),
+                new Claim("userName", user.UserName),
+                new Claim("email", user.Email),
+                new Claim("role", user.Role),
+                new Claim("firstName", user.FirstName),
+                new Claim("lastName", user.LastName),
+                new Claim("gender", user.Gender ? "Male" : "Female")
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JwtSettings:SecretKey")));
