@@ -26,7 +26,7 @@ namespace Back_End_Dot_Net.Controllers
             _validator = new FeaturesValidator(dbContext);
         }
 
-        [Route("get-all-phone")]
+        [Route("get-all-phone"), Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Phone>>> GetAllPhone()
         {
@@ -105,27 +105,50 @@ namespace Back_End_Dot_Net.Controllers
                     phone.Name == name &&
                     phone.Hide == false
                 )
-                .Select(phone => new
-                {
-                    phone.Name,
-                    phone.Image,
-                    phone.BatteryPower,
-                    phone.Charging,
-                    phone.FrontCameraMP,
-                    phone.InStorage,
-                    phone.MainCameraMP,
-                    phone.Nits,
-                    phone.RAM,
-                    phone.ScreenHz
-                })
-                .ToListAsync();
+                .FirstOrDefaultAsync();
 
             if (phone == null)
             {
                 return NotFound();
             }
 
-            return Ok(phone);
+            phone.AccessTime = phone.AccessTime + 1; // Update the AccessTime field by 1
+
+            _dbContext.Update(phone); // Mark the entity as modified
+            await _dbContext.SaveChangesAsync(); // Save the changes to the database
+
+            return Ok(new
+            {
+                // Overview 
+                phone.Name,
+                phone.Image,
+                phone.Description,
+                phone.Price,
+                // Performance info
+                phone.CPUName,
+                phone.CPUSpeedBase,
+                phone.CPUSpeedBoost,
+                phone.RAM,
+                phone.RAMSpeed,
+                phone.InStorage,
+                phone.PerformanceFeatures,
+                // Screen info
+                phone.ScreenSize,
+                phone.Resolution,
+                phone.ScreenHz,
+                phone.Nits,
+                phone.ScreenFeatures,
+                // Design info
+                phone.Weight,
+                phone.Height,
+                phone.Width,
+                phone.DesignFeatures,
+                // Battery info
+                phone.BatteryPower,
+                phone.MagSafe,
+                // Features
+                phone.Features
+            });
         }
 
         [Route("top-5-accessed-phones")]

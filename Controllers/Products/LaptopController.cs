@@ -27,7 +27,7 @@ namespace Back_End_Dot_Net.Controllers
             _validator = new FeaturesValidator(dbContext);
         }
 
-        [Route("get-all-laptops")]
+        [Route("get-all-laptops"), Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Laptop>>> GetAllLaptop()
         {
@@ -102,26 +102,52 @@ namespace Back_End_Dot_Net.Controllers
             }
 
             var laptop = await _dbContext.Laptops
-                .Where(laptop => laptop.Name == name)
-                .Select(laptop => new
-                {
-                    laptop.Name,
-                    laptop.Image,
-                    laptop.CPU,
-                    laptop.Ram,
-                    laptop.RamSpeed,
-                    laptop.ScreenSize,
-                    laptop.InStorage,
-                    laptop.Weight,
-                })
-                .ToListAsync();
+                .Where(laptop =>
+                    laptop.Name == name &&
+                    laptop.Hide == false)
+                .FirstOrDefaultAsync();
 
             if (laptop == null)
             {
                 return NotFound();
             }
 
-            return Ok(laptop);
+            laptop.AccessTime = laptop.AccessTime + 1; // Update the AccessTime field by 1
+
+            _dbContext.Update(laptop); // Mark the entity as modified
+            await _dbContext.SaveChangesAsync(); // Save the changes to the database
+
+            return Ok(new
+            {
+                // Overview 
+                laptop.Name,
+                laptop.Image,
+                laptop.Description,
+                laptop.Price,
+                // Performance info
+                laptop.CPU,
+                laptop.Ram,
+                laptop.RamSpeed,
+                laptop.InStorage,
+                laptop.PerformanceFeatures,
+                // Screen info
+                laptop.ScreenSize,
+                laptop.Resolution,
+                laptop.ScreenHz,
+                laptop.Nits,
+                laptop.ScreenFeatures,
+                // Design info
+                laptop.Weight,
+                laptop.Height,
+                laptop.Width,
+                laptop.Thickness,
+                laptop.DesignFeatures,
+                // Battery info
+                laptop.BatteryPower,
+                laptop.MagSafe,
+                // Features
+                laptop.Features
+            });
         }
 
         [Route("top-5-accessed-laptops")]

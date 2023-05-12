@@ -92,11 +92,16 @@ namespace Back_End_Dot_Net.Controllers
                 UserName = userRegisterDto.UserName,
                 Password = passwordHashed,
                 PasswordSalt = passwordSalt,
-                Avatar = userRegisterDto.Avatar ?? null
             };
 
             _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
+
+            var response = new
+            {
+                Status = 200,
+                Message = "User registration successfully"
+            };
 
             return user;
         }
@@ -130,10 +135,67 @@ namespace Back_End_Dot_Net.Controllers
 
             string token = CreateToken(existingUser);
 
-            var response = new {
+            var response = new
+            {
                 Status = "Success",
                 Message = "Login successfully",
                 Token = token
+            };
+
+            return Ok(response);
+        }
+
+        [Route("change-password")]
+        [HttpPost]
+        [Authorize]
+        public async Task<ActionResult> ChangePassword(UserChangePasswordDTO model)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest();
+            }
+
+            // Check if the new password is the same as the current password
+            if (model.CurrentPassword == model.NewPassword)
+            {
+                var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Validation);
+                errorMessage.AddError("New password cannot be the same as the current password.");
+
+                return BadRequest(errorMessage);
+            }
+
+            // Retrieve the user from the database by ID
+            var existingUser = await _dbContext.Users.FindAsync(new Guid(userId));
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+
+            // Verify the current password provided by the user
+            if (!VerifyPasswordHash(model.CurrentPassword, existingUser.Password, existingUser.PasswordSalt))
+            {
+                var errorMessage = new ErrorResponse(ErrorTitle.ValidationTitle, ErrorStatus.BadRequest, ErrorType.Authentication);
+                errorMessage.AddError("Current password is incorrect.");
+
+                return BadRequest(errorMessage);
+            }
+
+            // Generate new password hash and salt for the user
+            byte[] newPassword = Encoding.ASCII.GetBytes(model.NewPassword);
+            CreatePasswordHash(newPassword, out byte[] newPasswordHashed, out byte[] newPasswordSalt);
+
+            // Update the user's password in the database
+            existingUser.Password = newPasswordHashed;
+            existingUser.PasswordSalt = newPasswordSalt;
+
+            _dbContext.Users.Update(existingUser);
+            await _dbContext.SaveChangesAsync();
+
+            var response = new
+            {
+                Status = "Success",
+                Message = "Password changed successfully",
             };
 
             return Ok(response);
@@ -172,7 +234,7 @@ namespace Back_End_Dot_Net.Controllers
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JwtSettings:SecretKey")));
-            
+
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var token = new JwtSecurityToken(

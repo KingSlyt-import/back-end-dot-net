@@ -22,11 +22,11 @@ namespace Back_End_Dot_Net.Controllers
         public ChipsetController(ApplicationDBContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
-            _mapper = mapper;           
+            _mapper = mapper;
             _validator = new FeaturesValidator(dbContext);
         }
 
-        [Route("get-all-chipset")]
+        [Route("get-all-chipset"), Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Chipset>>> GetAllChipset()
         {
@@ -107,36 +107,40 @@ namespace Back_End_Dot_Net.Controllers
                     chipset.Name == name &&
                     chipset.Hide == false
                 )
-                .Select(chipset => new
-                {
-                    // Overview info
-                    chipset.Name,
-                    chipset.Image,
-                    // General info
-                    chipset.Type,
-                    chipset.CPUSocket,
-                    chipset.TDP,
-                    chipset.semiconductorSize,
-                    chipset.CPUTemp,
-                    chipset.Pci,
-                    // Performance info
-                    chipset.CpuSpeedBase,
-                    chipset.CpuSpeedBoost,
-                    chipset.CpuThread,
-                    chipset.PerformanceFeatures,
-                    // Memory info
-                    chipset.RAMSpeed,
-                    chipset.RAMVersion,
-                    chipset.MemoryChannels
-                })
-                .ToListAsync();
+                .FirstOrDefaultAsync();
 
             if (chipset == null)
             {
                 return NotFound();
             }
 
-            return Ok(chipset);
+            chipset.AccessTime = chipset.AccessTime + 1; // Update the AccessTime field by 1
+
+            _dbContext.Update(chipset); // Mark the entity as modified
+            await _dbContext.SaveChangesAsync(); // Save the changes to the database
+
+            return Ok(new
+            {
+                // Overview info
+                chipset.Name,
+                chipset.Image,
+                // General info
+                chipset.Type,
+                chipset.CPUSocket,
+                chipset.TDP,
+                chipset.semiconductorSize,
+                chipset.CPUTemp,
+                chipset.Pci,
+                // Performance info
+                chipset.CpuSpeedBase,
+                chipset.CpuSpeedBoost,
+                chipset.CpuThread,
+                chipset.PerformanceFeatures,
+                // Memory info
+                chipset.RAMSpeed,
+                chipset.RAMVersion,
+                chipset.MemoryChannels
+            });
         }
 
         [Route("top-5-accessed-chipsets")]
