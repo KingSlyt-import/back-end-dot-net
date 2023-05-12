@@ -45,13 +45,32 @@ namespace Back_End_Dot_Net.Controllers
                 return NotFound();
             }
 
-            var response = new
-            {
-                Total = laptops.Count(),
-                Data = laptops
-            };
+            // Get all unique CpuIds from the laptops
+            var cpuIds = laptops.Select(laptop => laptop.CpuId).Distinct().ToList();
 
-            return Ok(response);
+            // Query the Chipset model to get the CPU names
+            var cpuNames = await _dbContext.Chipsets
+                .Where(chipset => cpuIds.Contains(chipset.Id))
+                .ToDictionaryAsync(chipset => chipset.Id, chipset => chipset.Name);
+
+            return Ok(cpuIds);
+
+            // // Map the CPU names to the laptops
+            // foreach (var laptop in laptops)
+            // {
+            //     if (cpuNames.ContainsKey(laptop.CpuId))
+            //     {
+            //         laptop.CPU = cpuNames[laptop.CpuId];
+            //     }
+            // }
+
+            // var response = new
+            // {
+            //     Total = laptops.Count(),
+            //     Data = laptops
+            // };
+
+            // return Ok(response);
         }
 
         [Route("get-laptops")]
@@ -105,6 +124,37 @@ namespace Back_End_Dot_Net.Controllers
                 .Where(laptop =>
                     laptop.Name == name &&
                     laptop.Hide == false)
+                .Select(laptop => new
+                {
+                    // Overview 
+                    laptop.Name,
+                    laptop.Image,
+                    laptop.Description,
+                    laptop.Price,
+                    // Performance info
+                    laptop.CPU,
+                    laptop.Ram,
+                    laptop.RamSpeed,
+                    laptop.InStorage,
+                    laptop.PerformanceFeatures,
+                    // Screen info
+                    laptop.ScreenSize,
+                    laptop.Resolution,
+                    laptop.ScreenHz,
+                    laptop.Nits,
+                    laptop.ScreenFeatures,
+                    // Design info
+                    laptop.Weight,
+                    laptop.Height,
+                    laptop.Width,
+                    laptop.Thickness,
+                    laptop.DesignFeatures,
+                    // Battery info
+                    laptop.BatteryPower,
+                    laptop.MagSafe,
+                    // Features
+                    laptop.Features,
+                })
                 .FirstOrDefaultAsync();
 
             if (laptop == null)
@@ -112,42 +162,13 @@ namespace Back_End_Dot_Net.Controllers
                 return NotFound();
             }
 
-            laptop.AccessTime = laptop.AccessTime + 1; // Update the AccessTime field by 1
+            // Query the Laptop entity again to update its AccessTime property
+            var laptopToUpdate = await _dbContext.Laptops.FirstOrDefaultAsync(laptop => laptop.Name == name && laptop.Hide == false);
+            laptopToUpdate.AccessTime++;
 
-            _dbContext.Update(laptop); // Mark the entity as modified
             await _dbContext.SaveChangesAsync(); // Save the changes to the database
 
-            return Ok(new
-            {
-                // Overview 
-                laptop.Name,
-                laptop.Image,
-                laptop.Description,
-                laptop.Price,
-                // Performance info
-                laptop.CPU,
-                laptop.Ram,
-                laptop.RamSpeed,
-                laptop.InStorage,
-                laptop.PerformanceFeatures,
-                // Screen info
-                laptop.ScreenSize,
-                laptop.Resolution,
-                laptop.ScreenHz,
-                laptop.Nits,
-                laptop.ScreenFeatures,
-                // Design info
-                laptop.Weight,
-                laptop.Height,
-                laptop.Width,
-                laptop.Thickness,
-                laptop.DesignFeatures,
-                // Battery info
-                laptop.BatteryPower,
-                laptop.MagSafe,
-                // Features
-                laptop.Features
-            });
+            return Ok(laptop);
         }
 
         [Route("top-5-accessed-laptops")]

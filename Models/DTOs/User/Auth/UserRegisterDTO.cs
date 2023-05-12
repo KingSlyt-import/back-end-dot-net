@@ -23,7 +23,5 @@ namespace Back_End_Dot_Net.DTOs
         [Required]
         [MinLength(6)]
         public string? Password { get; set; }
-
-        public string? Avatar { get; set; }
     }
 }
