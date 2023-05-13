@@ -143,6 +143,18 @@ namespace Back_End_Dot_Net.Controllers
             });
         }
 
+        [Route("compare-chipsets/{name1}/{name2}")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Chipset>>> CompareChipsets(string name1, string name2)
+        {
+            var chipset1Result = await GetChipsetByName(name1);
+            var chipset2Result = await GetChipsetByName(name2);
+
+            var chipsets = new[] { chipset1Result, chipset2Result };
+            return new OkObjectResult(chipsets);
+        }
+
+
         [Route("top-5-accessed-chipsets")]
         [HttpGet]
         public IActionResult GetTop5AccessedChipsets()

@@ -75,15 +75,38 @@ namespace Back_End_Dot_Net.Controllers
 
         [Route("get-laptops")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Laptop>>> GetLaptops()
+        public async Task<ActionResult<IEnumerable<Laptop>>> GetLaptops(string sort)
         {
             if (_dbContext.Laptops == null)
             {
                 return NotFound();
             }
 
-            var laptops = await _dbContext.Laptops
-                .Where(laptop => laptop.Hide == false)
+            IQueryable<Laptop> laptopsQuery = _dbContext.Laptops
+                .Where(laptop => laptop.Hide == false);
+
+            // Determine sorting order based on the sort parameter
+            switch (sort)
+            {
+                case "price_asc":
+                    laptopsQuery = laptopsQuery.OrderBy(laptop => laptop.Price);
+                    break;
+                case "price_desc":
+                    laptopsQuery = laptopsQuery.OrderByDescending(laptop => laptop.Price);
+                    break;
+                case "release_date_asc":
+                    laptopsQuery = laptopsQuery.OrderBy(laptop => laptop.CreatedDate);
+                    break;
+                case "release_date_desc":
+                    laptopsQuery = laptopsQuery.OrderByDescending(laptop => laptop.CreatedDate);
+                    break;
+                // Default sorting order is by name ascending
+                default:
+                    laptopsQuery = laptopsQuery.OrderBy(laptop => laptop.Name);
+                    break;
+            }
+
+            var laptops = await laptopsQuery
                 .Select(laptop => new
                 {
                     laptop.Name,
@@ -110,6 +133,7 @@ namespace Back_End_Dot_Net.Controllers
 
             return Ok(response);
         }
+
 
         [Route("get-laptop-by-name/{name}")]
         [HttpGet]
