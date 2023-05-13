@@ -53,17 +53,34 @@ namespace Back_End_Dot_Net.Controllers
             return Ok(response);
         }
 
-        [Route("get-phones")]
+        [Route("get-chipsets")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Phone>>> GetPhones()
+        public async Task<ActionResult<IEnumerable<Phone>>> GetPhones(string sort = "name_asc")
         {
-            if (_dbContext.Phones == null)
+            var phonesQuery = _dbContext.Phones.Where(phone => phone.Hide == false);
+
+            // Determine sorting order based on the sort parameter
+            switch (sort)
             {
-                return NotFound();
+                case "price_asc":
+                    phonesQuery = phonesQuery.OrderBy(phone => phone.Price);
+                    break;
+                case "price_desc":
+                    phonesQuery = phonesQuery.OrderByDescending(phone => phone.Price);
+                    break;
+                case "release_date_asc":
+                    phonesQuery = phonesQuery.OrderBy(phone => phone.CreatedDate);
+                    break;
+                case "release_date_desc":
+                    phonesQuery = phonesQuery.OrderByDescending(phone => phone.CreatedDate);
+                    break;
+                // Default sorting order is by name ascending
+                default:
+                    phonesQuery = phonesQuery.OrderBy(phone => phone.Name);
+                    break;
             }
 
-            var phone = await _dbContext.Phones
-                .Where(phone => phone.Hide == false)
+            var phones = await phonesQuery
                 .Select(phone => new
                 {
                     phone.Name,
@@ -77,15 +94,15 @@ namespace Back_End_Dot_Net.Controllers
                 })
                 .ToListAsync();
 
-            if (phone == null)
+            if (phones == null)
             {
                 return NotFound();
             }
 
             var response = new
             {
-                Total = phone.Count(),
-                Data = phone
+                Total = phones.Count(),
+                Data = phones
             };
 
             return Ok(response);

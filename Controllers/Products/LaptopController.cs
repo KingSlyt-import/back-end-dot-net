@@ -100,6 +100,9 @@ namespace Back_End_Dot_Net.Controllers
                 case "release_date_desc":
                     laptopsQuery = laptopsQuery.OrderByDescending(laptop => laptop.CreatedDate);
                     break;
+                case "most_popular":
+                    laptopsQuery = laptopsQuery.OrderBy(chipset => chipset.AccessTime);
+                    break;
                 // Default sorting order is by name ascending
                 default:
                     laptopsQuery = laptopsQuery.OrderBy(laptop => laptop.Name);

@@ -55,15 +55,29 @@ namespace Back_End_Dot_Net.Controllers
 
         [Route("get-chipsets")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Chipset>>> GetChipsets()
+        public async Task<ActionResult<IEnumerable<Chipset>>> GetChipsets(string sort = "name_asc")
         {
-            if (_dbContext.Chipsets == null)
+            var chipsetsQuery = _dbContext.Chipsets.Where(chipset => chipset.Hide == false);
+
+            // Determine sorting order based on the sort parameter
+            switch (sort)
             {
-                return NotFound();
+                case "most_popular":
+                    chipsetsQuery = chipsetsQuery.OrderBy(chipset => chipset.AccessTime);
+                    break;
+                case "release_date_asc":
+                    chipsetsQuery = chipsetsQuery.OrderBy(chipset => chipset.CreatedDate);
+                    break;
+                case "release_date_desc":
+                    chipsetsQuery = chipsetsQuery.OrderByDescending(chipset => chipset.CreatedDate);
+                    break;
+                // Default sorting order is by name ascending
+                default:
+                    chipsetsQuery = chipsetsQuery.OrderBy(chipset => chipset.Name);
+                    break;
             }
 
-            var chipsets = await _dbContext.Chipsets
-                .Where(chipset => chipset.Hide == false)
+            var chipsets = await chipsetsQuery
                 .Select(chipset => new
                 {
                     chipset.Name,
@@ -92,6 +106,7 @@ namespace Back_End_Dot_Net.Controllers
 
             return Ok(response);
         }
+
 
         [Route("get-chipset-by-name/{name}")]
         [HttpGet]
