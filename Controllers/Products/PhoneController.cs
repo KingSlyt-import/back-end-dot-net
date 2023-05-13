@@ -62,6 +62,9 @@ namespace Back_End_Dot_Net.Controllers
             // Determine sorting order based on the sort parameter
             switch (sort)
             {
+                case "most_popular":
+                    phonesQuery = phonesQuery.OrderBy(phone => phone.AccessTime);
+                    break;
                 case "price_asc":
                     phonesQuery = phonesQuery.OrderBy(phone => phone.Price);
                     break;
