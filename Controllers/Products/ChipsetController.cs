@@ -143,6 +143,7 @@ namespace Back_End_Dot_Net.Controllers
             return Ok(new
             {
                 // Overview info
+                ProductType = "cpu",
                 chipset.Name,
                 chipset.Image,
                 // General info

@@ -148,6 +148,7 @@ namespace Back_End_Dot_Net.Controllers
             return Ok(new
             {
                 // Overview 
+                ProductType = "phone",
                 phone.Name,
                 phone.Image,
                 phone.Description,

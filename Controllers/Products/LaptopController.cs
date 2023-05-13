@@ -154,6 +154,7 @@ namespace Back_End_Dot_Net.Controllers
                 .Select(laptop => new
                 {
                     // Overview 
+                    ProductType = "laptop",
                     laptop.Name,
                     laptop.Image,
                     laptop.Description,
