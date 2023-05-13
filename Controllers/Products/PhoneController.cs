@@ -53,17 +53,23 @@ namespace Back_End_Dot_Net.Controllers
             return Ok(response);
         }
 
-        [Route("get-chipsets")]
+        [Route("get-phones")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Phone>>> GetPhones(string sort = "name_asc")
         {
-            var phonesQuery = _dbContext.Phones.Where(phone => phone.Hide == false);
+            if (_dbContext.Phones == null)
+            {
+                return NotFound();
+            }
+
+            IQueryable<Phone> phonesQuery = _dbContext.Phones
+                .Where(phone => phone.Hide == false);
 
             // Determine sorting order based on the sort parameter
             switch (sort)
             {
                 case "most_popular":
-                    phonesQuery = phonesQuery.OrderBy(phone => phone.AccessTime);
+                    phonesQuery = phonesQuery.OrderByDescending(phone => phone.AccessTime);
                     break;
                 case "price_asc":
                     phonesQuery = phonesQuery.OrderBy(phone => phone.Price);

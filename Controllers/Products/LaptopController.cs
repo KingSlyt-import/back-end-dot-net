@@ -75,7 +75,7 @@ namespace Back_End_Dot_Net.Controllers
 
         [Route("get-laptops")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Laptop>>> GetLaptops(string sort)
+        public async Task<ActionResult<IEnumerable<Laptop>>> GetLaptops(string sort = "name_asc")
         {
             if (_dbContext.Laptops == null)
             {
@@ -101,7 +101,7 @@ namespace Back_End_Dot_Net.Controllers
                     laptopsQuery = laptopsQuery.OrderByDescending(laptop => laptop.CreatedDate);
                     break;
                 case "most_popular":
-                    laptopsQuery = laptopsQuery.OrderBy(chipset => chipset.AccessTime);
+                    laptopsQuery = laptopsQuery.OrderByDescending(laptop => laptop.AccessTime);
                     break;
                 // Default sorting order is by name ascending
                 default:

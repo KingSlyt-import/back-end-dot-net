@@ -57,13 +57,19 @@ namespace Back_End_Dot_Net.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Chipset>>> GetChipsets(string sort = "name_asc")
         {
-            var chipsetsQuery = _dbContext.Chipsets.Where(chipset => chipset.Hide == false);
+            if (_dbContext.Chipsets == null)
+            {
+                return NotFound();
+            }
+
+            IQueryable<Chipset> chipsetsQuery = _dbContext.Chipsets
+                .Where(chipset => chipset.Hide == false);
 
             // Determine sorting order based on the sort parameter
             switch (sort)
             {
                 case "most_popular":
-                    chipsetsQuery = chipsetsQuery.OrderBy(chipset => chipset.AccessTime);
+                    chipsetsQuery = chipsetsQuery.OrderByDescending(chipset => chipset.AccessTime);
                     break;
                 case "release_date_asc":
                     chipsetsQuery = chipsetsQuery.OrderBy(chipset => chipset.CreatedDate);
