@@ -55,7 +55,9 @@ namespace Back_End_Dot_Net.Controllers
 
         [Route("get-chipsets")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Chipset>>> GetChipsets(string sort = "name_asc")
+        public async Task<ActionResult<IEnumerable<Chipset>>> GetChipsets(
+            [FromQuery] string sort = "name_asc",
+            [FromQuery(Name = "filter[]")] FilterChipsetDTO[] filters = null)
         {
             if (_dbContext.Chipsets == null)
             {
@@ -64,6 +66,65 @@ namespace Back_End_Dot_Net.Controllers
 
             IQueryable<Chipset> chipsetsQuery = _dbContext.Chipsets
                 .Where(chipset => chipset.Hide == false);
+
+            if (filters != null)
+            {
+                foreach (var filter in filters.Where(f => f != null))
+                {
+                    if (string.IsNullOrEmpty(filter.Manufacture))
+                    {
+                        chipsetsQuery.Where(chipset => chipset.Manufacture == filter.Manufacture);
+                    }
+                    if (filter.Type != null)
+                    {
+                        chipsetsQuery.Where(chipset => chipset.Type == filter.Type);
+                    }
+                    if (filter.CPUSocket != null)
+                    {
+                        chipsetsQuery.Where(chipset => chipset.CPUSocket == filter.CPUSocket);
+                    }
+                    if (filter.CPUTemp != null)
+                    {
+                        chipsetsQuery.Where(chipset => chipset.CPUTemp <= filter.CPUTemp);
+                    }
+                    if (filter.TDP != null)
+                    {
+                        chipsetsQuery.Where(chipset => chipset.TDP <= filter.TDP);
+                    }
+                    if (filter.CpuSpeedBase != null)
+                    {
+                        chipsetsQuery.Where(chipset => chipset.CpuSpeedBase <= filter.CpuSpeedBase);
+                    }
+                    if (filter.CpuSpeedBoost != null)
+                    {
+                        chipsetsQuery.Where(chipset => chipset.CpuSpeedBoost <= filter.CpuSpeedBoost);
+                    }
+                    if (filter.CpuThread != null)
+                    {
+                        chipsetsQuery.Where(chipset => chipset.CpuThread <= filter.CpuThread);
+                    }
+                    if (filter.semiconductorSize != null)
+                    {
+                        chipsetsQuery.Where(chipset => chipset.semiconductorSize <= filter.semiconductorSize);
+                    }
+                    if (filter.Pci != null)
+                    {
+                        chipsetsQuery.Where(chipset => chipset.Pci <= filter.Pci);
+                    }
+                    if (filter.MemoryChannels != null)
+                    {
+                        chipsetsQuery.Where(chipset => chipset.MemoryChannels <= filter.MemoryChannels);
+                    }
+                    if (filter.RAMVersion != null)
+                    {
+                        chipsetsQuery.Where(chipset => chipset.RAMVersion <= filter.RAMVersion);
+                    }
+                    if (filter.RAMSpeed != null)
+                    {
+                        chipsetsQuery.Where(chipset => chipset.RAMSpeed <= filter.RAMSpeed);
+                    }
+                }
+            }
 
             // Determine sorting order based on the sort parameter
             switch (sort)

@@ -55,7 +55,9 @@ namespace Back_End_Dot_Net.Controllers
 
         [Route("get-phones")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Phone>>> GetPhones(string sort = "name_asc")
+        public async Task<ActionResult<IEnumerable<Phone>>> GetPhones(
+            [FromQuery] string sort = "name_asc",
+            [FromQuery(Name = "filter[]")] FilterPhoneDTO[] filters = null)
         {
             if (_dbContext.Phones == null)
             {
@@ -64,6 +66,75 @@ namespace Back_End_Dot_Net.Controllers
 
             IQueryable<Phone> phonesQuery = _dbContext.Phones
                 .Where(phone => phone.Hide == false);
+
+            if (filters != null)
+            {
+                foreach (var filter in filters.Where(f => f != null))
+                {
+                    if (string.IsNullOrEmpty(filter.Manufacture))
+                    {
+                        phonesQuery.Where(chipset => chipset.Manufacture == filter.Manufacture);
+                    }
+                    if (filter.Price != null)
+                    {
+                        phonesQuery.Where(chipset => chipset.Price == filter.Price);
+                    }
+                    if (filter.RAM != null)
+                    {
+                        phonesQuery.Where(chipset => chipset.RAM == filter.RAM);
+                    }
+                    if (filter.InStorage != null)
+                    {
+                        phonesQuery.Where(chipset => chipset.InStorage <= filter.InStorage);
+                    }
+                    if (filter.ScreenSize != null)
+                    {
+                        phonesQuery.Where(chipset => chipset.ScreenSize <= filter.ScreenSize);
+                    }
+                    if (filter.ScreenHz != null)
+                    {
+                        phonesQuery.Where(chipset => chipset.ScreenHz <= filter.ScreenHz);
+                    }
+                    if (filter.Nits != null)
+                    {
+                        phonesQuery.Where(chipset => chipset.Nits <= filter.Nits);
+                    }
+                    if (filter.Ppi != null)
+                    {
+                        phonesQuery.Where(chipset => chipset.Ppi <= filter.Ppi);
+                    }
+                    if (filter.Weight != null)
+                    {
+                        phonesQuery.Where(chipset => chipset.Weight <= filter.Weight);
+                    }
+                    if (filter.Height != null)
+                    {
+                        phonesQuery.Where(chipset => chipset.Height <= filter.Height);
+                    }
+                    if (filter.Width != null)
+                    {
+                        phonesQuery.Where(chipset => chipset.Width <= filter.Width);
+                    }
+                    if (filter.FrontCameraMP != null)
+                    {
+                        phonesQuery.Where(chipset => chipset.FrontCameraMP <= filter.FrontCameraMP);
+                    }
+                    if (filter.BatteryPower != null)
+                    {
+                        phonesQuery.Where(chipset => chipset.BatteryPower <= filter.BatteryPower);
+                    }
+                    if (filter.Charging != null)
+                    {
+                        phonesQuery.Where(chipset => chipset.Charging <= filter.Charging);
+                    }
+                    if (filter.MagSafe != null)
+                    {
+                        phonesQuery.Where(chipset =>
+                            filter.MagSafe == true ?
+                                chipset.MagSafe == true : chipset.MagSafe == false);
+                    }
+                }
+            }
 
             // Determine sorting order based on the sort parameter
             switch (sort)

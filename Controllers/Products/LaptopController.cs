@@ -75,7 +75,9 @@ namespace Back_End_Dot_Net.Controllers
 
         [Route("get-laptops")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Laptop>>> GetLaptops(string sort = "name_asc")
+        public async Task<ActionResult<IEnumerable<Laptop>>> GetLaptops(
+            [FromQuery] string sort = "name_asc",
+            [FromQuery(Name = "filter[]")] FilterLaptopDTO[] filters = null)
         {
             if (_dbContext.Laptops == null)
             {
@@ -84,6 +86,67 @@ namespace Back_End_Dot_Net.Controllers
 
             IQueryable<Laptop> laptopsQuery = _dbContext.Laptops
                 .Where(laptop => laptop.Hide == false);
+
+            if (filters != null)
+            {
+                foreach (var filter in filters.Where(f => f != null))
+                {
+                    if (string.IsNullOrEmpty(filter.Manufacture))
+                    {
+                        laptopsQuery.Where(chipset => chipset.Manufacture == filter.Manufacture);
+                    }
+                    if (filter.Price != null)
+                    {
+                        laptopsQuery.Where(chipset => chipset.Price == filter.Price);
+                    }
+                    if (filter.Ram != null)
+                    {
+                        laptopsQuery.Where(chipset => chipset.Ram == filter.Ram);
+                    }
+                    if (filter.InStorage != null)
+                    {
+                        laptopsQuery.Where(chipset => chipset.InStorage <= filter.InStorage);
+                    }
+                    if (filter.ScreenSize != null)
+                    {
+                        laptopsQuery.Where(chipset => chipset.ScreenSize <= filter.ScreenSize);
+                    }
+                    if (filter.ScreenHz != null)
+                    {
+                        laptopsQuery.Where(chipset => chipset.ScreenHz <= filter.ScreenHz);
+                    }
+                    if (filter.Nits != null)
+                    {
+                        laptopsQuery.Where(chipset => chipset.Nits <= filter.Nits);
+                    }
+                    if (filter.Weight != null)
+                    {
+                        laptopsQuery.Where(chipset => chipset.Weight <= filter.Weight);
+                    }
+                    if (filter.Height != null)
+                    {
+                        laptopsQuery.Where(chipset => chipset.Height <= filter.Height);
+                    }
+                    if (filter.Width != null)
+                    {
+                        laptopsQuery.Where(chipset => chipset.Width <= filter.Width);
+                    }
+                    if (filter.Thickness != null)
+                    {
+                        laptopsQuery.Where(chipset => chipset.Thickness <= filter.Thickness);
+                    }
+                    if (filter.BatteryPower != null)
+                    {
+                        laptopsQuery.Where(chipset => chipset.BatteryPower <= filter.BatteryPower);
+                    }
+                    if (filter.MagSafe != null)
+                    {
+                        laptopsQuery.Where(chipset =>
+                            filter.MagSafe == true ?
+                                chipset.MagSafe == true : chipset.MagSafe == false);
+                    }
+                }
+            }
 
             // Determine sorting order based on the sort parameter
             switch (sort)
