@@ -117,6 +117,8 @@ namespace Back_End_Dot_Net.Controllers
             _dbContext.Update(phone); // Mark the entity as modified
             await _dbContext.SaveChangesAsync(); // Save the changes to the database
 
+            var cameraMain = phone.MainCameraMP.Split("+");
+
             return Ok(new
             {
                 // Overview 
@@ -128,11 +130,12 @@ namespace Back_End_Dot_Net.Controllers
                 phone.CPUName,
                 phone.CPUSpeedBase,
                 phone.CPUSpeedBoost,
+                phone.PerformanceFeatures,
+                // Memory Info
                 phone.RAM,
                 phone.RAMSpeed,
                 phone.InStorage,
-                phone.PerformanceFeatures,
-                // Screen info
+                // Display info
                 phone.ScreenSize,
                 phone.Resolution,
                 phone.ScreenHz,
@@ -143,6 +146,10 @@ namespace Back_End_Dot_Net.Controllers
                 phone.Height,
                 phone.Width,
                 phone.DesignFeatures,
+                // Camera info
+                MainCameraMP = cameraMain,
+                MainCameraCount = cameraMain.Length,
+                phone.FrontCameraMP,
                 // Battery info
                 phone.BatteryPower,
                 phone.MagSafe,

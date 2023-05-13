@@ -5,6 +5,7 @@ public enum ChipsetType
     Laptop,
     Desktop,
     Phone,
+    Server,
     All
 }
 

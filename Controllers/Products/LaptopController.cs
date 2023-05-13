@@ -133,6 +133,8 @@ namespace Back_End_Dot_Net.Controllers
                     laptop.Price,
                     // Performance info
                     laptop.CPU,
+                    cpuSpeedBase = laptop.CPU.CpuSpeedBase,
+                    cpuSpeedBoost = laptop.CPU.CpuSpeedBoost,
                     laptop.Ram,
                     laptop.RamSpeed,
                     laptop.InStorage,
